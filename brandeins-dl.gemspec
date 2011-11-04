@@ -9,9 +9,11 @@ Gem::Specification.new do |s|
   s.email       = ["gregory.igelmund@gmail.com"]
   s.homepage    = "http://www.grekko.de"
   s.summary     = %q{BrandEins Downloader allows you to download past volumes of the Brand Eins magazine}
-  s.description = %q{BrandEins Downloader offers two commands: 'thor brandeins download YEAR' and 'thor brandeins download YEAR --volume=NUMBER'}
+  s.description = %q{BrandEins Downloader offers two commands: 'brandeins download YEAR' and 'brandeins download YEAR --volume=NUMBER'}
 
   #s.rubyforge_project = "brandeins-dl"
+  s.add_dependency "rake"
+  s.add_dependency "thor"
   s.add_dependency "nokogiri"
 
   s.files         = `git ls-files`.split("\n")

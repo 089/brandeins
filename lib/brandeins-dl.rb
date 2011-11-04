@@ -5,8 +5,22 @@ require 'uri'
 require 'fileutils'
 
 module BrandEins
-  class Dl
 
+  class CLI < Thor
+    desc "download YEAR", "Download all magazines of the defined year"
+    method_option :volume, :type => :numeric
+    def download(year)
+      b1 = BrandEins::Download.new
+  
+      if options.volume then
+        b1.get_magazine(year, options.volume)
+      else
+        b1.get_magazines_of_year(year)
+      end
+    end
+  end
+
+  class Downloader
     attr_reader :archive
   
     def initialize
@@ -199,5 +213,6 @@ module BrandEins
       end
 
     end
-  
+
+  end  
 end
