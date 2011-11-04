@@ -81,7 +81,7 @@ module BrandEins
     def merge_pdfs(pdf_files, target_pdf)
       puts "Merging single PDFs now"
       pdf_sources = pdf_files.join(" ")
-      system "pdftk #{pdf_sources} output #{target_pdf}"
+      system "pdftk #{pdf_sources} output #{@dl_dir}/#{target_pdf}"
     end
   
     def cleanup
