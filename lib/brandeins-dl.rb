@@ -3,6 +3,7 @@ require 'nokogiri'
 require 'open-uri'
 require 'uri'
 require 'fileutils'
+require 'thor'
 
 module BrandEins
 
