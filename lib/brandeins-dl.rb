@@ -8,18 +8,21 @@ require 'thor'
 module BrandEins
 
   class CLI < Thor
-    desc "download", "Download all magazines of the defined year"
+    desc "download_all", "Download all magazines of the defined year"
     method_option :year, :type => :numeric, :required => true
-    method_option :volume, :type => :numeric
     method_option :path, :type => :string, :required => true
-    def download(year)
+    def download_all
       b1 = BrandEins::Downloader.new(options.path)
-  
-      if options.volume then
-        b1.get_magazine(year, options.volume)
-      else
-        b1.get_magazines_of_year(year)
-      end
+      b1.get_magazines_of_year(year)
+    end
+
+    desc "download", "Download all magazines of the defined year"
+    method_option :path, :type => :string, :required => true
+    method_option :year, :type => :numeric, :required => true
+    method_option :volume, :type => :numeric, :required => true
+    def download
+      b1 = BrandEins::Downloader.new(options.path)
+      b1.get_magazine(year, options.volume)
     end
   end
 
