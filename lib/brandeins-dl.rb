@@ -11,7 +11,7 @@ module BrandEins
     desc "download YEAR", "Download all magazines of the defined year"
     method_option :volume, :type => :numeric
     def download(year)
-      b1 = BrandEins::Download.new
+      b1 = BrandEins::Downloader.new
   
       if options.volume then
         b1.get_magazine(year, options.volume)
