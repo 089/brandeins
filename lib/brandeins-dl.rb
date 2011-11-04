@@ -13,16 +13,16 @@ module BrandEins
     method_option :path, :type => :string, :required => true
     def download_all
       b1 = BrandEins::Downloader.new(options.path)
-      b1.get_magazines_of_year(year)
+      b1.get_magazines_of_year(options.year)
     end
 
     desc "download", "Download all magazines of the defined year"
     method_option :path, :type => :string, :required => true
-    method_option :year, :type => :numeric, :required => true
     method_option :volume, :type => :numeric, :required => true
+    method_option :year, :type => :numeric, :required => true
     def download
       b1 = BrandEins::Downloader.new(options.path)
-      b1.get_magazine(year, options.volume)
+      b1.get_magazine(options.year, options.volume)
     end
   end
 
