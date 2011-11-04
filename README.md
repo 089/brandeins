@@ -16,8 +16,11 @@ several ruby libraries (that you can get through rubygems)
 
 
 ## Usage
+
 Download just one magazine
+
 `brandeins download --path=/Path/where/to/download/the/files --year=2011 --volume=5`
 
 Download the whole collecion of a certain year
+
 `brandeins download_all --path=/Path/where/to/download/the/files --year=2011`
