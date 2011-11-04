@@ -8,10 +8,12 @@ require 'thor'
 module BrandEins
 
   class CLI < Thor
-    desc "download YEAR", "Download all magazines of the defined year"
+    desc "download", "Download all magazines of the defined year"
+    method_option :year, :type => :numeric, :required => true
     method_option :volume, :type => :numeric
+    method_option :path, :type => :string, :required => true
     def download(year)
-      b1 = BrandEins::Downloader.new
+      b1 = BrandEins::Downloader.new(options.path)
   
       if options.volume then
         b1.get_magazine(year, options.volume)
@@ -24,10 +26,16 @@ module BrandEins
   class Downloader
     attr_reader :archive
   
-    def initialize
+    def initialize(path)
       @url     = "http://www.brandeins.de"
       @archive = ArchiveSite.new
-      @dl_dir  = "download"
+      @dl_dir  = path
+
+      check_download_path
+    end
+
+    def check_download_path
+      Dir.mkdir(@dl_dir) unless File.exists?(@dl_dir)
     end
   
     def get_magazines_of_year(year = 2000)
@@ -82,8 +90,6 @@ module BrandEins
       def initialize(pdf_links, dl_dir)
         @dl_dir    = dl_dir
         @pdf_links = pdf_links
-  
-        Dir.mkdir(@dl_dir) unless File.exists?(@dl_dir)
       end
   
       def download_all
