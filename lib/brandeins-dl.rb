@@ -33,12 +33,13 @@ module BrandEins
       @url     = "http://www.brandeins.de"
       @archive = ArchiveSite.new
       @dl_dir  = path
+      @tmp_dir = path + "/tmp"
 
       check_download_path
     end
 
     def check_download_path
-      Dir.mkdir(@dl_dir) unless File.exists?(@dl_dir)
+      FileUtils.mkdir_p @tmp_dir unless File.exists?(@tmp_dir)
     end
   
     def get_magazines_of_year(year = 2000)
@@ -73,7 +74,7 @@ module BrandEins
     end
   
     def process_pdf_links(pdf_links, target_pdf)
-      pdf_downloader = PDFDownloader.new(pdf_links, @dl_dir)
+      pdf_downloader = PDFDownloader.new(pdf_links, @tmp_dir)
       pdf_files = pdf_downloader.download_all
       merge_pdfs(pdf_files, target_pdf)
     end
@@ -85,7 +86,7 @@ module BrandEins
     end
   
     def cleanup
-      FileUtils.rm_r Dir.glob("#{@dl_dir}/*")
+      FileUtils.rm_r @tmp_dir
     end
   
     class PDFDownloader
@@ -226,3 +227,7 @@ module BrandEins
 
   end  
 end
+
+b1 = BrandEins::Downloader.new "/Users/gregoryigelmund/Desktop/tmp"
+b1.get_magazine(2012, 1)
+
