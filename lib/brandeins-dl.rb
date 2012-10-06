@@ -28,11 +28,11 @@ module BrandEins
       b1 = BrandEins::Downloader.new(options.path)
       b1.get_magazine(options.year, options.volume)
     end
-  end
 
-  desc 'version', 'Displays current version'
-  def version
-    puts BrandEins::VERSION
+    desc 'version', 'Displays current version'
+    def version
+      puts BrandEins::VERSION
+    end
   end
 
   class Downloader
