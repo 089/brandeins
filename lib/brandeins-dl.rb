@@ -12,7 +12,7 @@ end
 module BrandEins
 
   class CLI < Thor
-    desc "download_all", "Download all magazines of the defined year"
+    desc 'download_all', 'Download all magazines of the defined year'
     method_option :year, :type => :numeric, :required => true
     method_option :path, :type => :string, :required => true
     def download_all
@@ -20,7 +20,7 @@ module BrandEins
       b1.get_magazines_of_year(options.year)
     end
 
-    desc "download", "Download all magazines of the defined year"
+    desc 'download', 'Download all magazines of the defined year'
     method_option :path, :type => :string, :required => true
     method_option :volume, :type => :numeric, :required => true
     method_option :year, :type => :numeric, :required => true
@@ -28,6 +28,11 @@ module BrandEins
       b1 = BrandEins::Downloader.new(options.path)
       b1.get_magazine(options.year, options.volume)
     end
+  end
+
+  desc 'version', 'Displays current version'
+  def version
+    puts BrandEins::VERSION
   end
 
   class Downloader
