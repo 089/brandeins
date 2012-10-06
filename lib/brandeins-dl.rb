@@ -27,7 +27,7 @@ module BrandEins
       b1.get_magazines_of_year(options.year)
     end
 
-    desc 'download', 'Download all magazines of the defined year'
+    desc 'download', 'Download a specific volume'
     method_option :path, :type => :string, :required => true
     method_option :volume, :type => :numeric, :required => true
     method_option :year, :type => :numeric, :required => true
@@ -161,6 +161,7 @@ module BrandEins
       end
 
       def get_magazine_links_by_year(year = 2000)
+        setup
         puts "Loading Magazine from year #{year}"
         magazine_nodes_with_meta = @doc.css(".jahrgang-#{year} ul li")
         magazine_links = Array.new
