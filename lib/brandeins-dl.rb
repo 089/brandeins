@@ -12,6 +12,13 @@ end
 module BrandEins
 
   class CLI < Thor
+    map '--version' => :version
+
+    desc '--version', 'Displays current version'
+    def version
+      puts BrandEins::VERSION
+    end
+
     desc 'download_all', 'Download all magazines of the defined year'
     method_option :year, :type => :numeric, :required => true
     method_option :path, :type => :string, :required => true
@@ -27,11 +34,6 @@ module BrandEins
     def download
       b1 = BrandEins::Downloader.new(options.path)
       b1.get_magazine(options.year, options.volume)
-    end
-
-    desc 'version', 'Displays current version'
-    def version
-      puts BrandEins::VERSION
     end
   end
 
