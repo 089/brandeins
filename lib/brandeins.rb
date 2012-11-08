@@ -26,18 +26,19 @@ module BrandEins
     method_option :all
     method_option :year, :type => :numeric
     def download
-      path = options.path || Dir.pwd
-      year = options.year || Time.new.year
+      path   = options.path || Dir.pwd
+      year   = options.year || Time.new.year
+      all    = options.all
       volume = options.volume
-      all = options.all
+
       if volume.nil? && all.nil?
         puts "If you want to download a specific volune use the --volume flag or use --all to download all volumes of a year"
       else
         b1 = BrandEins::Downloader.new path
         if !all.nil?
-          b1.get_magazines_of_year year if !volume.nil?
-        elsif !volume.nil?
-          b1.get_magazine year, volume 
+          b1.get_magazines_of_year year
+        else
+          b1.get_magazine year, volume
         end
       end
     end
