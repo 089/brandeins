@@ -1,11 +1,11 @@
 class BrandEinsSetup
   def initialize
-    p 'Checking requirements for your system'
+    puts 'Checking requirements for your system'
     if pdftk?
-      p 'It seems you have pdftk installed on your system.'
+      puts 'It seems you have pdftk installed on your system.'
     else
-      p 'It seems you are missing pdfk on your system.'
-      p pdfk_install_instructions
+      puts 'It seems you are missing pdfk on your system. You are ready to go!'
+      puts pdfk_install_instructions
     end
   end
 

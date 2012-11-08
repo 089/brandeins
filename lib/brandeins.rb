@@ -17,7 +17,7 @@ module BrandEins
 
     desc '--version', 'Displays current version'
     def version
-      p BrandEins::VERSION
+      puts BrandEins::VERSION
     end
 
     desc 'download', 'Download past brand eins magazines (use `brandeins help download` to learn more about options)'
@@ -26,7 +26,7 @@ module BrandEins
     method_option :year, :type => :numeric
     def download
       path = options.path || File.expand_path('../..', __FILE__)
-      p "path: #{path}"
+      puts "path: #{path}"
       return false
       b1 = BrandEins::Downloader.new(options.path)
       b1.get_magazine(options.year, options.volume)
@@ -37,7 +37,7 @@ module BrandEins
       if BrandEinsHelper.windows? || BrandEinsHelper.osx?
         require 'brandeins/setup'
       else
-        p 'Unknown/unsupported operating system. Please contact the gem author.'
+        puts 'Unknown/unsupported operating system. Please contact the gem author.'
       end
     end
   end
