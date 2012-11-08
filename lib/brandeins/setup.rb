@@ -14,6 +14,6 @@ class BrandEinsSetup
   end
 
   def pdftk?
-    if system(cmd).nil? then false else true end
+    if system('pdftk --version').nil? then false else true end
   end
 end
