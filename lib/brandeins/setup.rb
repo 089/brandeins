@@ -14,19 +14,33 @@ class BrandEinsSetup
   end
 
   def pdftk?
-    cmd? 'pdftk --version', 'pdftk.com'
+    raise 'Missing implementation'
   end
 
-  private
-  def cmd?(cmd, hint)
+  protected
+  def _cmd?(cmd, hint)
+    if RUBY_PLATFORM.include? 'darwin'
+      _cmdosx(cmd, hint)
+    elsif RUBY_PLATFORM.include? 'w32'
+      _cmdw32(cmd, hint)
+    end
+  end
+
+  def _cmdw32(cmd, hint)
     f = IO.popen cmd
     f.readlines.each do |line|
       if line.include? hint
         return true
       end
     end
-    return false
+  end
+
+  def _cmdosx(cmd, hint)
+    f = IO.popen cmd
+    f.readlines.each do |line|
+      if line.include? hint
+        return true
+      end
+    end
   end
 end
-
-BrandEinsSetup.new
