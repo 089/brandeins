@@ -23,13 +23,23 @@ module BrandEins
     desc 'download', 'Download past brand eins magazines (use `brandeins help download` to learn more about options)'
     method_option :path, :type => :string
     method_option :volume, :type => :numeric
+    method_option :all
     method_option :year, :type => :numeric
     def download
-      path = options.path || File.expand_path('../..', __FILE__)
-      puts "path: #{path}"
-      return false
-      b1 = BrandEins::Downloader.new(options.path)
-      b1.get_magazine(options.year, options.volume)
+      path = options.path || Dir.pwd
+      year = options.year || Time.new.year
+      volume = options.volume
+      all = options.all
+      if volume.nil? && all.nil?
+        puts "If you want to download a specific volune use the --volume flag or use --all to download all volumes of a year"
+      else
+        b1 = BrandEins::Downloader.new path
+        if !all.nil?
+          b1.get_magazines_of_year year if !volume.nil?
+        elsif !volume.nil?
+          b1.get_magazine year, volume 
+        end
+      end
     end
 
     desc 'setup', 'Checks if all requirements to use brandeins are met and gives instructions how to meet them'
