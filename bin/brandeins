@@ -1,4 +1,4 @@
 #!/usr/bin/env ruby
 
-require 'brandeins-dl'
+require 'brandeins'
 BrandEins::CLI.start
