@@ -1,4 +1,4 @@
-require File.expand_path('../../lib/brandeins-dl' , __FILE__)
+require File.expand_path('../../lib/brandeins' , __FILE__)
 require 'minitest/autorun'
 require 'fakefs/safe'
 

@@ -1,5 +1,5 @@
 %w(
-  brandeins-dl/version
+  brandeins/version
   nokogiri
   open-uri
   uri
