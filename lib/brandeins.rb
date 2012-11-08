@@ -1,5 +1,6 @@
 %w(
   brandeins/version
+  brandeins/helper
   nokogiri
   open-uri
   uri
@@ -16,24 +17,30 @@ module BrandEins
 
     desc '--version', 'Displays current version'
     def version
-      puts BrandEins::VERSION
+      p BrandEins::VERSION
     end
 
-    desc 'download_all', 'Download all magazines of the defined year'
-    method_option :year, :type => :numeric, :required => true
-    method_option :path, :type => :string, :required => true
-    def download_all
-      b1 = BrandEins::Downloader.new(options.path)
-      b1.get_magazines_of_year(options.year)
-    end
-
-    desc 'download', 'Download a specific volume'
-    method_option :path, :type => :string, :required => true
-    method_option :volume, :type => :numeric, :required => true
-    method_option :year, :type => :numeric, :required => true
+    desc 'download', 'Download past brand eins magazines (use `brandeins help download` to learn more about options)'
+    method_option :path, :type => :string
+    method_option :volume, :type => :numeric
+    method_option :year, :type => :numeric
     def download
+      path = options.path || File.expand_path('../..', __FILE__)
+      p "path: #{path}"
+      return false
       b1 = BrandEins::Downloader.new(options.path)
       b1.get_magazine(options.year, options.volume)
+    end
+
+    desc 'setup', 'Checks if all requirements to use brandeins are met and gives instructions how to meet them'
+    def setup
+      if BrandEinsHelper.windows?
+        require 'brandeins/setup-win'
+      elsif BrandEinsHelper.osx?
+        require 'brandeins/setup-osx'
+      else
+        p 'Unknown/unsupported operating system. Please contact the gem author.'
+      end
     end
   end
 

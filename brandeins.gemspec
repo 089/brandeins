@@ -9,7 +9,7 @@ Gem::Specification.new do |s|
   s.email       = ["gregory.igelmund@gmail.com"]
   s.homepage    = "http://www.grekko.de"
   s.summary     = %q{BrandEins gem allows you to download past volumes of the Brand Eins magazine}
-  s.description = %q{BrandEins gem offers two commands: 'brandeins --year=YYYY' and 'brandeins --year=YYYY --volume=N'}
+  s.description = %q{BrandEins gem offers a download command to download a specific or all volumes. Use `brandeins help` to find out more about it}
 
   s.add_dependency "rake"
   s.add_dependency "thor"
@@ -21,7 +21,9 @@ Gem::Specification.new do |s|
   s.require_paths = ["lib"]
 
   s.post_install_message =<<-EOT
-BrandEins gem depends currently runs on unix systems only and depends on pdftk to merge downloaded pdfs.
+BrandEins gem currently runs on unix systems only and depends on pdftk to merge downloaded pdfs.
 Run `brandeins setup` to check if all requirements are met and for informations on how to meet them.
+
+
 EOT
 end
