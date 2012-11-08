@@ -34,10 +34,8 @@ module BrandEins
 
     desc 'setup', 'Checks if all requirements to use brandeins are met and gives instructions how to meet them'
     def setup
-      if BrandEinsHelper.windows?
-        require 'brandeins/setup-win'
-      elsif BrandEinsHelper.osx?
-        require 'brandeins/setup-osx'
+      if BrandEinsHelper.windows? || BrandEinsHelper.osx?
+        require 'brandeins/setup'
       else
         p 'Unknown/unsupported operating system. Please contact the gem author.'
       end
