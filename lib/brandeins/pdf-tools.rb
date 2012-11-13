@@ -2,22 +2,20 @@ module BrandEins
   module PdfTools
     attr_reader :pdf_tools, :pdf_tool
 
-    def self.get_pdf_tool(env)
-      if env.nil?
-        @env[:os] = RUBY_PLATFORM
-      else
-        @env = env
-      end
+    def self.get_pdf_tool(env = nil)
+      @env = Hash.new
+      env = Hash.new if env.nil?
+      @env[:os] = env[:os] || RUBY_PLATFORM
 
       @pdf_tools ||= _init_pdf_tools
       @pdf_tool ||= @pdf_tools.first.new if @pdf_tools.length > 0
     end
 
     class Template
-      attr_accessor :cmd, :args, :cmd_path
+      attr_accessor :cmd, :args, :noop
 
       def available?
-        _cmd_available? @cmd
+        _cmd_available? @cmd, @noop
       end
 
       def merge_pdf_files(pdf_files, target_pdf)
@@ -35,9 +33,9 @@ module BrandEins
       end
 
       private
-      def _cmd_available? (cmd)
+      def _cmd_available? (cmd, args)
         begin
-          open("|#{cmd}").close
+          open("|#{cmd} #{args}").close
         rescue Exception
           return false
         end
@@ -50,8 +48,9 @@ module BrandEins
 
     class PdftkOSX < TemplateOSX
       def initialize
-        @cmd  = 'pdftk2'
+        @cmd  = 'pdftk'
         @args = '__pdf_files__ output __target_pdf__'
+        @noop = ' --version'
       end
     end
 
@@ -59,6 +58,7 @@ module BrandEins
       def initialize
         @cmd  = 'gswin64c.exe'
         @args = ' -dNOPAUSE -dBATCH -sDEVICE=pdfwrite -sOutputFile=__target_pdf__ __pdf_files__'
+        @noop = ' --version'
       end
     end
 

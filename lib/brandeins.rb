@@ -59,24 +59,6 @@ module BrandEins
         setup.run
       end
     end
-
-    desc 'test', 'test some stuff'
-    method_option :input, :type => :string
-    method_option :output, :type => :string
-    def test
-      gs = BrandEins::PdfTools::GhostscriptWin.new
-      if gs.available?
-        puts "GS is available"
-        if options.input.nil? || options.output.nil?
-          puts "need input/output to merge files"
-        else
-          puts "input: #{options.input}, output: #{options.output}"
-          BrandEins::PdfTools::GhostscriptWin.merge_pdf_files(options.input, options.output)
-        end
-      else
-        puts "GS not found"
-      end
-    end
   end
 
   class Downloader

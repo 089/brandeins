@@ -22,9 +22,8 @@ Gem::Specification.new do |s|
   s.require_paths = ["lib"]
 
   s.post_install_message =<<-EOT
-BrandEins gem currently runs on unix systems only and depends on pdftk to merge downloaded pdfs.
+BrandEins gem runs on windows and os x and depends on pdftk/ghostscript to merge downloaded pdfs.
 Run `brandeins setup` to check if all requirements are met and for informations on how to meet them.
-
 
 EOT
 end

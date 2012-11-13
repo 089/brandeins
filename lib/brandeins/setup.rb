@@ -4,7 +4,8 @@ module BrandEins
   class Setup
     attr_reader :pdf_tool
 
-    def initialize(env)
+    def initialize(env = nil)
+      env = Hash.new if env.nil?
       @os = env[:os] || RUBY_PLATFORM
       @pdf_tool = env[:pdf_tool] || BrandEins::PdfTools.get_pdf_tool(env)
     end
@@ -14,7 +15,7 @@ module BrandEins
       if @pdf_tool.available?
         puts "\nIt seems you have #{@pdf_tool.cmd} running on your system. You are ready to go!"
       else
-        puts "\nIt seems you are missing a working pdf utility on your system. Use `brandeins setup help` to get help."
+        puts "\nIt seems you are missing a working pdf utility on your system. Use `brandeins setup --help` to get help."
       end
     end
 
