@@ -1,13 +1,19 @@
 %w(
   brandeins/version
   brandeins/setup
+  brandeins/pdf-tools
   nokogiri
   open-uri
   uri
   fileutils
   thor
+  prawn
 ).each do |lib|
+  begin
     require lib
+  rescue Exception => e
+    puts "missing #{lib}, #{e.inspect}"
+  end
 end
 
 module BrandEins
@@ -44,8 +50,32 @@ module BrandEins
     end
 
     desc 'setup', 'Checks if all requirements for using brandeins gem are met'
+    method_option :help
     def setup
-      BrandEinsSetup.new
+      setup = BrandEins::Setup.new
+      if !options.help.nil?
+        setup.help
+      else
+        setup.run
+      end
+    end
+
+    desc 'test', 'test some stuff'
+    method_option :input, :type => :string
+    method_option :output, :type => :string
+    def test
+      gs = BrandEins::PdfTools::GhostscriptWin.new
+      if gs.available?
+        puts "GS is available"
+        if options.input.nil? || options.output.nil?
+          puts "need input/output to merge files"
+        else
+          puts "input: #{options.input}, output: #{options.output}"
+          BrandEins::PdfTools::GhostscriptWin.merge_pdf_files(options.input, options.output)
+        end
+      else
+        puts "GS not found"
+      end
     end
   end
 
@@ -56,7 +86,8 @@ module BrandEins
       @url     = 'http://www.brandeins.de'
       @archive = false
       @dl_dir  = path
-      @tmp_dir = path + '/tmp'
+      @tmp_dir = path + '/brand-eins-tmp'
+      @pdftool = BrandEins::PdfTools.get_pdf_tool
       create_tmp_dirs
     end
 
@@ -83,7 +114,7 @@ module BrandEins
       magazine_links = @archive.get_magazine_links_by_year(year)
       target_magazine_link = magazine_links[volume-1]
 
-      get_magazine_by_link(target_magazine_link, target_pdf)
+      get_magazine_by_link(target_magazine_link, target_pdf, year, volume)
     end
 
     private
@@ -91,26 +122,58 @@ module BrandEins
       FileUtils.mkdir_p @tmp_dir unless File.directory?(@tmp_dir)
     end
 
-    def get_magazine_by_link(target_magazine_link, target_pdf)
+    def get_magazine_by_link(target_magazine_link, target_pdf, year, volume)
       pdf_links = @archive.magazine_pdf_links(target_magazine_link)
-      process_pdf_links(pdf_links, target_pdf)
-      cleanup
+      pdf_files = download_pdfs(pdf_links)
+
+      pdf_cover = create_cover_pdf(year, volume)
+      pdf_files = pdf_files.reverse.push(pdf_cover).reverse
+
+      if !@pdftool.nil?
+        @pdftool.merge_pdf_files(pdf_files, target_pdf)
+        cleanup
+      else
+        if RUBY_PLATFORM.include? 'darwin'
+          puts 'brandeins wont merge the single pdf files since it didnt find the pdftk tool'
+        end
+      end
+    end
+
+    def create_cover_pdf(year, volume)
+      cover = @archive.get_magazine_cover(year, volume)
+      cover_title = cover[:title]
+      cover_img_url  = cover[:img_url]
+      cover_img_file = @tmp_dir + "/cover-#{year}-#{volume}.jpg"
+      cover_pdf_file = @tmp_dir + "/cover-#{year}-#{volume}.pdf"
+
+      File.open(cover_img_file,'w') do |f|
+        uri = URI.parse(cover_img_url)
+        Net::HTTP.start(uri.host,uri.port) do |http|
+          http.request_get(uri.path) do |res|
+            res.read_body do |seg|
+              f << seg
+      #hack -- adjust to suit:
+              sleep 0.005
+            end
+          end
+        end
+      end
+
+      require 'prawn'
+      Prawn::Document.generate(cover_pdf_file) do |pdf|
+        pdf.text "<font size='18'><b>" + cover_title + "</b></font>", :align => :center, :inline_format => true
+        pdf.image cover_img_file, :position => :center, :vposition => :center
+      end
+      return cover_pdf_file
     end
 
     def get_target_pdf(year, volume)
       "Brand-Eins-#{year}-#{volume}.pdf"
     end
 
-    def process_pdf_links(pdf_links, target_pdf)
+    def download_pdfs(pdf_links)
       pdf_downloader = PDFDownloader.new(pdf_links, @tmp_dir)
-      pdf_files = pdf_downloader.download_all
-      merge_pdfs(pdf_files, target_pdf)
-    end
-
-    def merge_pdfs(pdf_files, target_pdf)
-      puts "Merging single PDFs now"
-      pdf_sources = pdf_files.join(" ")
-      system "pdftk #{pdf_sources} output #{@dl_dir}/#{target_pdf}"
+      pdf_downloader.download_all
     end
 
     def cleanup
@@ -130,7 +193,6 @@ module BrandEins
           pdf_name = @dl_dir + '/' + File.basename(pdf_link)
           pdf_url = pdf_link
           download_pdf(pdf_url, pdf_name)
-
           pdf_files << pdf_name
         end
         pdf_files
@@ -139,17 +201,15 @@ module BrandEins
       private
 
       def download_pdf(pdf_url, filename)
+        if File.exists? filename
+          puts "File #{filename} seems to be already downloaded"
+          return true
+        end
+
         puts "Downloading PDF from #{pdf_url} to #{filename}"
-        File.open(filename,'w') do |f|
-          uri = URI.parse(pdf_url)
-          Net::HTTP.start(uri.host,uri.port) do |http|
-            http.request_get(uri.path) do |res|
-              res.read_body do |seg|
-                f << seg
-        #hack -- adjust to suit:
-                sleep 0.005
-              end
-            end
+        File.open(filename,'wb') do |new_file|
+          open(pdf_url, 'rb') do |read_file|
+            new_file.write(read_file.read)
           end
         end
       end
@@ -190,6 +250,15 @@ module BrandEins
         magazine_links
       end
 
+      def get_magazine_cover(year, volume)
+        title   = @doc.css("#month_detail_#{year}_#{volume} .titel").children[0].to_s
+        img_url = ''
+        @doc.css("#month_detail_#{year}_#{volume} .cover a img").each do |node|
+          img_url = node['src']
+        end
+        return { :title => title, :img_url => @base_url + '/' + img_url }
+      end
+
       def magazine_pdf_links(url)
         magazine = ArchiveMagazine.new(url, @base_url)
         magazine.get_magazine_pdf_links
@@ -207,7 +276,6 @@ module BrandEins
 
         def get_magazine_pdf_links
           [get_editorial_article_links, get_schwerpunkt_article_links].flatten
-
         end
 
         def get_schwerpunkt_article_links
@@ -250,14 +318,11 @@ module BrandEins
             if link[0].nil? then
               return nil
             else
-              href = link[0]['href']
+              return link[0]['href']
             end
           end
-
         end
-
       end
     end
-
   end
 end
