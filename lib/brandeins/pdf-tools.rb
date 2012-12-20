@@ -20,7 +20,6 @@ module BrandEins
 
       def merge_pdf_files(pdf_files, target_pdf)
         begin
-          puts "args: #{@args}"
           arg_files = pdf_files.join " "
           args = self.args.gsub(/__pdf_files__/, arg_files).gsub(/__target_pdf__/, target_pdf)
           puts "executing: #{@cmd} #{args}"
