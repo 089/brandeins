@@ -112,7 +112,8 @@ module BrandEins
       pdf_files = pdf_files.reverse.push(pdf_cover).reverse
 
       if !@pdftool.nil?
-        @pdftool.merge_pdf_files(pdf_files, target_pdf)
+        target_pdf_path = "#{@dl_dir}/#{target_pdf}"
+        @pdftool.merge_pdf_files(pdf_files, target_pdf_path)
         cleanup
       else
         if RUBY_PLATFORM.include? 'darwin'
