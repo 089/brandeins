@@ -20,10 +20,10 @@ module BrandEins
 
       def merge_pdf_files(pdf_files, target_pdf)
         begin
-          arg_files = pdf_files.join " "
-          args = self.args.gsub(/__pdf_files__/, arg_files).gsub(/__target_pdf__/, target_pdf)
+          pdf_files_arg = pdf_files.map {|pdf_file| "'#{pdf_file}'" }.join ' '
+          args = self.args.join(' ').gsub(/__pdf_files__/, pdf_files_arg).gsub(/__target_pdf__/, target_pdf)
           puts "executing: #{@cmd} #{args}"
-          open("|#{@cmd} #{args}").close
+          IO.popen("#{@cmd} #{args}") { |f| puts f.gets }
         rescue Exception => e
           puts "error: #{e.inspect}"
           return false
@@ -48,16 +48,16 @@ module BrandEins
     class PdftkOSX < TemplateOSX
       def initialize
         @cmd  = 'pdftk'
-        @args = '__pdf_files__ output __target_pdf__'
-        @noop = ' --version'
+        @args = ['__pdf_files__', 'output', '__target_pdf__']
+        @noop = ['--version']
       end
     end
 
     class GhostscriptWin < TemplateWin
       def initialize
         @cmd  = 'gswin64c.exe'
-        @args = ' -dNOPAUSE -dBATCH -sDEVICE=pdfwrite -sOutputFile=__target_pdf__ __pdf_files__'
-        @noop = ' --version'
+        @args = ['-dNOPAUSE', '-dBATCH', '-sDEVICE=pdfwrite', '-sOutputFile=__target_pdf__', '__pdf_files__']
+        @noop = ['--version']
       end
     end
 

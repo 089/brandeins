@@ -13,14 +13,6 @@ class TestBrandEinsDownload < MiniTest::Unit::TestCase
     # testing im allgemeinen: http://holmwood.id.au/~lindsay/2008/04/26/hints-for-testing-your-evolving-ruby-scripts/
   end
 
-  def test_tmp_directories_get_created
-    skip
-    FakeFS do
-      #bdl = BrandEins::Downloader.new @dir
-      #assert File.directory?(File.expand_path("./#{@dir}/tmp"))
-    end
-  end
-
   def test_magazine_url_scraping
     html = <<-EOF
       <div class="jahrgang jahrgang-2012 jahrgang-latest">
@@ -71,15 +63,4 @@ class TestBrandEinsDownload < MiniTest::Unit::TestCase
     assert_equal "Checking requirements for your system\n\nIt seems you have magic running on your system. You are ready to go!\n", out.string
   end
 
-  def test_brandeins_setup_missing_pdf_tool_path
-    pdf_tool = Object.new
-    pdf_tool.define_singleton_method :available? do false end
-    pdf_tool.define_singleton_method :cmd do 'magic' end
-
-    capture_stdout do
-      BrandEins::Setup.new :os => 'x86_64-darwin12.2.0', :pdf_tool => pdf_tool
-    end
-
-    assert_equal "Checking requirements for your system\n\nIt seems you have magic running on your system. You are ready to go!\n", out.string
-  end
 end
