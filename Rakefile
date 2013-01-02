@@ -10,7 +10,7 @@ task :install do
   sh "gem install ./pkg/brandeins-#{BrandEins::VERSION}.gem"
 end
 
-task :publish do
+task publish: [ :build ] do
   version = BrandEins::VERSION
   sh "gem push ./pkg/brandeins-#{BrandEins::VERSION}.gem"
 end
