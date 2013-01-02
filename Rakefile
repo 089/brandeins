@@ -12,7 +12,7 @@ end
 
 task :publish do
   version = BrandEins::VERSION
-  sh "gem push brandeins-#{BrandEins::VERSION}.gem"
+  sh "gem push ./pkg/brandeins-#{BrandEins::VERSION}.gem"
 end
 
 task :default => :test
