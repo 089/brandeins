@@ -79,12 +79,13 @@ module BrandEins
 
     def get_magazines_of_year(year = 2000)
       setup
-      puts "Getting all brand eins magazines of a #{year}. This could take a while..."
+      puts "Getting all brand eins magazines of #{year}. This could take a while..."
       magazine_links_per_year = @archive.get_magazine_links_by_year(year)
-      magazine_links_per_year.each_with_index do |magazine_link, volume|
+      magazine_links_per_year.each_with_index do |magazine_link, index|
+        volume = index+1
         puts "Parsing Volume #{volume} of #{year}"
         target_pdf = get_target_pdf(year, volume)
-        get_magazine_by_link(magazine_link, target_pdf)
+        get_magazine_by_link(magazine_link, target_pdf, year, volume)
       end
     end
 
