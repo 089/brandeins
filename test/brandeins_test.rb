@@ -1,8 +1,7 @@
 require File.expand_path('../helper' , __FILE__)
 require File.expand_path('../../lib/brandeins' , __FILE__)
-require File.expand_path('../../lib/brandeins/setup' , __FILE__)
 require 'minitest/autorun'
-require 'fakefs/safe'
+# require 'fakefs/safe'
 
 class TestBrandEinsDownload < MiniTest::Unit::TestCase
   def setup

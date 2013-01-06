@@ -3,7 +3,8 @@ require 'rake/testtask'
 require './lib/brandeins/version'
 
 Rake::TestTask.new do |t|
-  t.pattern = 'test/*_test.rb'
+  t.test_files = FileList['test/*_test.rb', 'specs/*_spec.rb']
+  t.verbose = true
 end
 
 task :install do

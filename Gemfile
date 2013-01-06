@@ -4,7 +4,7 @@ group :test do
   if ENV['RUBY_VERSION'][5,3] == '1.8'
     gem 'minitest'
   end
-  gem 'fakefs'
+  gem 'webmock'
 end
 
 
