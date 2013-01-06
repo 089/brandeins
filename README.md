@@ -12,7 +12,7 @@ several ruby libraries (that you can get through rubygems)
 
 
 ## Install
-`gem install brandeins-dl`
+`gem install brandeins`
 
 
 ## Usage
@@ -23,4 +23,4 @@ Download just one magazine
 
 Download the whole collecion of a certain year
 
-`brandeins download_all --path=/Path/where/to/download/the/files --year=2011`
+`brandeins download_all --path=/Path/where/to/download/the/files --year=2011 --all`
