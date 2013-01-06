@@ -23,7 +23,7 @@ module BrandEins
           pdf_files_arg = pdf_files.map {|pdf_file| "'#{pdf_file}'" }.join ' '
           args = self.args.join(' ').gsub(/__pdf_files__/, pdf_files_arg).gsub(/__target_pdf__/, target_pdf)
           puts "executing: #{@cmd} #{args}"
-          IO.popen("#{@cmd} #{args}") { |f| puts f.gets }
+          _exec("#{@cmd} #{args}")
         rescue Exception => e
           puts "error: #{e.inspect}"
           return false
@@ -32,6 +32,10 @@ module BrandEins
       end
 
       private
+      def _exec (cmd)
+        IO.popen(cmd)# { |f| puts f.gets }
+      end
+
       def _cmd_available? (cmd, args)
         begin
           open("|#{cmd} #{args}").close
