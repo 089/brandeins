@@ -7,7 +7,7 @@ these fragmented PDFs, downloads and merges them into a single pdf.
 
 
 ## Requirements
-BrandEins Downloader uses *pdftk* and depends on *ruby*, *rubygems*, and
+BrandEins Downloader uses [*pdftk*](http://www.pdflabs.com/tools/pdftk-the-pdf-toolkit/) and depends on *ruby*, *rubygems*, and
 several ruby libraries (that you can get through rubygems)
 
 
