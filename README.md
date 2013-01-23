@@ -23,4 +23,4 @@ Download just one magazine
 
 Download the whole collecion of a certain year
 
-`brandeins download_all --path=/Path/where/to/download/the/files --year=2011 --all`
+`brandeins download --path=/Path/where/to/download/the/files --year=2011 --all`
