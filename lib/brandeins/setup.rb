@@ -1,4 +1,4 @@
-require File.expand_path '../pdf-tools', __FILE__
+# encoding: utf-8
 
 module BrandEins
   class Setup

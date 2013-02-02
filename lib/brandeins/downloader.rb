@@ -1,8 +1,8 @@
 # encoding: utf-8
-require File.expand_path('../parser/article_site', __FILE__)
-require File.expand_path('../parser/magazine_site', __FILE__)
-require File.expand_path('../parser/archive_site', __FILE__)
-require File.expand_path('../merger/pdf_tools', __FILE__)
+require 'brandeins/parser/article_site'
+require 'brandeins/parser/magazine_site'
+require 'brandeins/parser/archive_site'
+require 'brandeins/merger/pdf_tools'
 
 module BrandEins
 

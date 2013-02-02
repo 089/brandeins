@@ -1,10 +1,10 @@
 # encoding: utf-8
-require File.expand_path('../extensions', __FILE__)
-require File.expand_path('../templates/base', __FILE__)
-require File.expand_path('../templates/osx', __FILE__)
-require File.expand_path('../templates/pdftk_osx', __FILE__)
-require File.expand_path('../templates/windows', __FILE__)
-require File.expand_path('../templates/ghostscript_windows', __FILE__)
+require 'brandeins/merger/extensions'
+require 'brandeins/merger/templates/base'
+require 'brandeins/merger/templates/osx'
+require 'brandeins/merger/templates/pdftk_osx'
+require 'brandeins/merger/templates/windows'
+require 'brandeins/merger/templates/ghostscript_windows'
 
 module BrandEins
   module Merger
