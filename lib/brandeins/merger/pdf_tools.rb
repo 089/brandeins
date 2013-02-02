@@ -4,7 +4,7 @@ require File.expand_path('../templates/base', __FILE__)
 require File.expand_path('../templates/osx', __FILE__)
 require File.expand_path('../templates/pdftk_osx', __FILE__)
 require File.expand_path('../templates/windows', __FILE__)
-require File.expand_path('../templates/ghostscript_winows', __FILE__)
+require File.expand_path('../templates/ghostscript_windows', __FILE__)
 
 module BrandEins
   module Merger
