@@ -2,12 +2,10 @@ require File.expand_path '../pdf-tools', __FILE__
 
 module BrandEins
   class Setup
-    attr_reader :pdf_tool
 
-    def initialize(env = nil)
-      env = Hash.new if env.nil?
+    def initialize(env = {})
       @os = env[:os] || RUBY_PLATFORM
-      @pdf_tool = env[:pdf_tool] || BrandEins::PdfTools.get_pdf_tool(env)
+      @pdf_tool = env[:pdf_tool] || BrandEins::Merging::PdfTools.get_pdf_tool(env)
     end
 
     def run
