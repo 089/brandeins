@@ -7,7 +7,7 @@ these fragmented PDFs, downloads and merges them into a single pdf.
 
 
 ## Requirements
-BrandEins Downloader uses *pdftk* and depends on *ruby*, *rubygems*, and
+BrandEins Downloader uses [*pdftk*](http://www.pdflabs.com/tools/pdftk-the-pdf-toolkit/) and depends on *ruby*, *rubygems*, and
 several ruby libraries (that you can get through rubygems)
 
 
@@ -23,4 +23,4 @@ Download just one magazine
 
 Download the whole collecion of a certain year
 
-`brandeins download_all --path=/Path/where/to/download/the/files --year=2011 --all`
+`brandeins download --path=/Path/where/to/download/the/files --year=2011 --all`
