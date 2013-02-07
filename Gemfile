@@ -5,6 +5,7 @@ group :test do
     gem 'minitest'
   end
   gem 'webmock'
+  gem 'debugger'
 end
 
 
