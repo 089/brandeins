@@ -3,6 +3,7 @@ require 'brandeins/parser/article_site'
 require 'brandeins/parser/magazine_site'
 require 'brandeins/parser/archive_site'
 require 'brandeins/merger/pdf_tools'
+require 'net/http'
 
 module BrandEins
 
@@ -12,7 +13,7 @@ module BrandEins
       @url     = 'http://www.brandeins.de'
       @dl_dir  = path
       @tmp_dir = @dl_dir + '/brand-eins-tmp'
-      @pdftool = BrandEins::Merger::PdfTools.get_pdf_tool
+      @pdftool = BrandEins::Merger::PDFTools.get_pdf_tool
       @archive = BrandEins::Parser::ArchiveSite.new(@url)
       create_tmp_dirs
     end
@@ -48,23 +49,13 @@ module BrandEins
       cover_img_file = @tmp_dir + "/cover-#{year}-#{volume}.jpg"
       cover_pdf_file = @tmp_dir + "/cover-#{year}-#{volume}.pdf"
 
-      File.open(cover_img_file,'w') do |f|
-        uri = URI.parse(cover_img_url)
-        Net::HTTP.start(uri.host, uri.port) do |http|
-          http.request_get(uri.path) do |res|
-            res.read_body do |seg|
-              f << seg
-      #hack -- adjust to suit:
-              sleep 0.005
-            end
-          end
-        end
-      end
+      IO.binwrite(cover_img_file, Net::HTTP.get(URI(cover_img_url)))
 
       Prawn::Document.generate(cover_pdf_file) do |pdf|
         pdf.text "<font size='18'><b>" + cover_title + "</b></font>", :align => :center, :inline_format => true
         pdf.image cover_img_file, :position => :center, :vposition => :center
       end
+
       return cover_pdf_file
     end
 
@@ -103,12 +94,7 @@ module BrandEins
       end
 
       puts "Downloading PDF from #{pdf_url} to #{pdf_filename}"
-      File.open(pdf_filename,'wb') do |new_file|
-        # TODO: this is still weird
-        open(pdf_url, 'rb') do |read_file|
-          new_file.write(read_file.read)
-        end
-      end
+      IO.binwrite(pdf_filename, Net::HTTP.get(URI(pdf_url)))
     end
 
     def cleanup

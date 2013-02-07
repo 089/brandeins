@@ -1,19 +1,22 @@
 # encoding: utf-8
 require 'nokogiri'
+require 'net/http'
 
 module BrandEins
   module Parser
     class ArchiveSite
 
-      def initialize(base_url, opts)
+      def initialize(base_url, opts = {})
         @base_url    = base_url
         @archive_url = @base_url + "/archiv.html"
 
-        html = opts[:html] and @doc = Nokogiri::HTML(html)
+        if html = opts[:html]
+          @doc = Nokogiri::HTML(html)
+        end
       end
 
       def doc
-        @doc || @doc = Nokogiri::HTML(open(@archive_url))
+        @doc || @doc = Nokogiri::HTML(Net::HTTP.get(URI(@archive_url)))
       end
 
       def get_magazine_links_by_year(year = 2000)

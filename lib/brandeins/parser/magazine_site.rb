@@ -1,5 +1,6 @@
 # encoding: utf-8
 require 'nokogiri'
+require 'net/http'
 
 module BrandEins
   module Parser
@@ -10,7 +11,7 @@ module BrandEins
       end
 
       def doc
-        @doc || @doc = Nokogiri::HTML(open(@url))
+        @doc || @doc = Nokogiri::HTML(Net::HTTP.get(URI(@url)))
       end
 
       def get_magazine_pdf_links
