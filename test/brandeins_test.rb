@@ -1,7 +1,7 @@
 require File.expand_path('../helper' , __FILE__)
 require File.expand_path('../../lib/brandeins' , __FILE__)
 require 'minitest/autorun'
-# require 'fakefs/safe'
+require 'debugger'
 
 class TestBrandEinsDownload < MiniTest::Unit::TestCase
   def setup
@@ -23,7 +23,7 @@ class TestBrandEinsDownload < MiniTest::Unit::TestCase
       </div>
     EOF
 
-    archive_site = BrandEins::Downloader::ArchiveSite.new(@base_url, html)
+    archive_site = BrandEins::Parser::ArchiveSite.new(@base_url, html: html)
     magazine_links = archive_site.get_magazine_links_by_year(2012)
     assert_equal magazine_links.length, 2
     assert_equal magazine_links[0], (@base_url + '/magazin/nein-sagen.html')
@@ -44,7 +44,7 @@ class TestBrandEinsDownload < MiniTest::Unit::TestCase
     </li>
     EOF
 
-    archive_site = BrandEins::Downloader::ArchiveSite.new @base_url, html
+    archive_site = BrandEins::Parser::ArchiveSite.new(@base_url, html: html)
     cover = archive_site.get_magazine_cover(2012, 4)
     assert_equal cover, { :title => "SCHWERPUNKT Kapitalismus", :img_url => "#{@base_url}/typo3temp/pics/08ff826417.jpg" }
   end
