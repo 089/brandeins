@@ -19,7 +19,7 @@ end
 rule /^version:bump:(major|minor|patch)/ do |t|
   sh "git status | grep 'nothing to commit'"
   index = ['major', 'minor','patch'].index(t.name.split(':').last)
-  file = 'lib/GEM_NAME/version.rb'
+  file = 'lib/brandeins/version.rb'
 
   version_file = File.read(file)
   old_version, *version_parts = version_file.match(/(\d+)\.(\d+)\.(\d+)/).to_a
