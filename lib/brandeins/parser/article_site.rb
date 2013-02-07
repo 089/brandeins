@@ -15,7 +15,7 @@ module BrandEins
       end
 
       def get_pdf_link
-        puts "Parsing Article: #{@url}"
+        puts "Parsing Article: #{@url}" if $BE_VERBOSE
         link = doc.css("div#sidebar ul li#downloaden a")
         link[0] and link[0]['href']
       end

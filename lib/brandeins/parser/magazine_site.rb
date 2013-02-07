@@ -15,7 +15,7 @@ module BrandEins
       end
 
       def get_magazine_pdf_links
-        puts "Parsing #{@url}"
+        puts "Parsing #{@url}" if $BE_VERBOSE
         [get_editorial_article_links, get_schwerpunkt_article_links].flatten
       end
 
@@ -33,10 +33,10 @@ module BrandEins
           article_link = @base_url + '/' + node['href']
           article  = BrandEins::Parser::ArticleSite.new(article_link)
           pdf_link = article.get_pdf_link
-          if pdf_link.nil? then
-            puts "------------------------------"
+          if pdf_link.nil? and $BE_VERBOSE then
+            puts "-------------------------------"
             puts "No Content for: #{article_link}"
-            puts "------------------------------"
+            puts "-------------------------------"
           else
             links << @base_url + '/' + pdf_link
           end

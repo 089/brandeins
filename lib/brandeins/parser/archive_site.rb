@@ -9,7 +9,6 @@ module BrandEins
       def initialize(base_url, opts = {})
         @base_url    = base_url
         @archive_url = @base_url + "/archiv.html"
-
         if html = opts[:html]
           @doc = Nokogiri::HTML(html)
         end
@@ -20,7 +19,7 @@ module BrandEins
       end
 
       def get_magazine_links_by_year(year = 2000)
-        puts "Loading Magazine from year #{year}"
+        puts "Loading Magazine from year #{year}" if $BE_VERBOSE
         magazine_nodes_with_meta = doc.css(".jahrgang-#{year} ul li")
         magazine_nodes_with_meta.each_with_object([]) do |node, links|
           if node['id'].nil? then

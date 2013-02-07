@@ -4,12 +4,14 @@ require 'brandeins/parser/magazine_site'
 require 'brandeins/parser/archive_site'
 require 'brandeins/merger/pdf_tools'
 require 'net/http'
+require 'prawn'
 
 module BrandEins
-
   class Downloader
 
-    def initialize(path)
+    def initialize(path, opts = {})
+      $BE_VERBOSE = !!opts[:verbose]
+
       @url     = 'http://www.brandeins.de'
       @dl_dir  = path
       @tmp_dir = @dl_dir + '/brand-eins-tmp'
@@ -19,18 +21,18 @@ module BrandEins
     end
 
     def get_magazines_of_year(year = 2000)
-      puts "Getting all brand eins magazines of #{year}. This may take a while..."
+      puts "Getting all brand eins magazines of #{year}. This may take a while..." if $BE_VERBOSE
       magazine_links_per_year = @archive.get_magazine_links_by_year(year)
       magazine_links_per_year.each_with_index do |magazine_link, index|
         volume = index+1
-        puts "Parsing Volume #{volume} of #{year}"
+        puts "Parsing Volume #{volume} of #{year}" if $BE_VERBOSE
         target_pdf = pdf_filename(year, volume)
         get_magazine_by_link(magazine_link, target_pdf, year, volume)
       end
     end
 
     def get_magazine(year = 2000, volume = 1)
-      puts "Parsing Volume #{volume} of #{year}"
+      puts "Parsing Volume #{volume} of #{year}" if $BE_VERBOSE
       target_pdf = pdf_filename(year, volume)
       magazine_links = @archive.get_magazine_links_by_year(year)
       magazine_link  = magazine_links[volume-1]
@@ -71,7 +73,7 @@ module BrandEins
         @pdftool.merge_pdf_files(pdf_files, target_pdf_path)
         cleanup
       else
-        puts 'brandeins wont merge the single pdf files since it didnt find an appropriate pdf tool'
+        puts 'brandeins wont merge the single pdf files since it didnt find an appropriate pdf tool' if $BE_VERBOSE
       end
     end
 
@@ -90,10 +92,11 @@ module BrandEins
 
     def download_pdf(pdf_url, pdf_filename)
       if File.exists? pdf_filename
-        puts "File #{pdf_filename} seems to be already downloaded" and return true
+        puts "File #{pdf_filename} seems to be already downloaded" if $BE_VERBOSE
+        return true
       end
 
-      puts "Downloading PDF from #{pdf_url} to #{pdf_filename}"
+      puts "Downloading PDF from #{pdf_url} to #{pdf_filename}" if $BE_VERBOSE
       IO.binwrite(pdf_filename, Net::HTTP.get(URI(pdf_url)))
     end
 

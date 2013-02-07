@@ -24,7 +24,7 @@ module BrandEins
       if volume.nil? and all.nil?
         puts "If you want to download a specific volune use the --volume flag or use --all to download all volumes of a year"
       else
-        downloader = BrandEins::Downloader.new(path)
+        downloader = BrandEins::Downloader.new(path, verbose: true)
         if !all.nil?
           downloader.get_magazines_of_year year
         else
