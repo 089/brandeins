@@ -45,14 +45,17 @@ module BrandEins
     end
 
     def create_cover_pdf(year, volume)
+      puts "Creating cover for Volume #{volume} of #{year}" if $BE_VERBOSE
       cover = @archive.get_magazine_cover(year, volume)
-      cover_title = cover[:title]
+      cover_title    = cover[:title]
       cover_img_url  = cover[:img_url]
       cover_img_file = @tmp_dir + "/cover-#{year}-#{volume}.jpg"
       cover_pdf_file = @tmp_dir + "/cover-#{year}-#{volume}.pdf"
 
+      puts "Downloading cover image from #{cover_img_url} to #{cover_img_file}" if $BE_VERBOSE
       IO.binwrite(cover_img_file, Net::HTTP.get(URI(cover_img_url)))
 
+      puts "Creating cover pdf #{cover_pdf_file} from #{cover_img_file}" if $BE_VERBOSE
       Prawn::Document.generate(cover_pdf_file) do |pdf|
         pdf.text "<font size='18'><b>" + cover_title + "</b></font>", :align => :center, :inline_format => true
         pdf.image cover_img_file, :position => :center, :vposition => :center
@@ -83,7 +86,7 @@ module BrandEins
 
     def download(pdf_links)
       pdf_links.each_with_object([]) do |pdf_link, pdf_files|
-        pdf_filename = @dl_dir + '/' + File.basename(pdf_link)
+        pdf_filename = @tmp_dir + '/' + File.basename(pdf_link)
         pdf_url = pdf_link
         download_pdf(pdf_url, pdf_filename)
         pdf_files << pdf_filename
