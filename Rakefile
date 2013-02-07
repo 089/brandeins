@@ -29,7 +29,7 @@ rule /^version:bump:(major|minor|patch)/ do |t|
   new_version = version_parts * '.'
   File.open(file,'w'){|f| f.write(version_file.sub(old_version, new_version)) }
 
-  sh "bundle && git add #{file} Gemfile.lock && git commit -m 'bump version to #{new_version}'"
+  sh "git add #{file} Gemfile.lock && git commit -m 'bump version to #{new_version}'"
 end
 
 task :default => :test
