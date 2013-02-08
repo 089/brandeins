@@ -34,7 +34,7 @@ module BrandEins
 
         def _cmd_available? (cmd, args)
           begin
-            open("|#{cmd} #{args}").close
+            open("|#{cmd} #{args.join(' ')}").close
           rescue Exception
             return false
           end
