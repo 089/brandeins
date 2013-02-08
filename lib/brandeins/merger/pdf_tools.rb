@@ -8,7 +8,7 @@ require 'brandeins/merger/templates/ghostscript_windows'
 
 module BrandEins
   module Merger
-    class PDFTools
+    class PdfTools
 
       class << self
         def get_pdf_tool(env = nil)

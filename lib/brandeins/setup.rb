@@ -5,7 +5,7 @@ module BrandEins
 
     def initialize(env = {})
       @os = env[:os] || RUBY_PLATFORM
-      @pdf_tool = env[:pdf_tool] || BrandEins::Merging::PdfTools.get_pdf_tool(env)
+      @pdf_tool = env[:pdf_tool] || BrandEins::Merger::PdfTools.get_pdf_tool(env)
     end
 
     def run

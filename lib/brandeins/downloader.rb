@@ -15,7 +15,7 @@ module BrandEins
       @url     = 'http://www.brandeins.de'
       @dl_dir  = path
       @tmp_dir = @dl_dir + '/brand-eins-tmp'
-      @pdftool = BrandEins::Merger::PDFTools.get_pdf_tool
+      @pdftool = BrandEins::Merger::PdfTools.get_pdf_tool
       @archive = BrandEins::Parser::ArchiveSite.new(@url)
       create_tmp_dirs
     end
