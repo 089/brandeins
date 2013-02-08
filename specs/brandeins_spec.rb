@@ -4,11 +4,24 @@ require 'webmock/minitest'
 require File.expand_path('../../lib/brandeins', __FILE__)
 
 describe BrandEins do
+
   it "shows current version" do
     out = capture_stdout do
       BrandEins::CLI.start(['--version'])
     end
     assert_equal BrandEins::VERSION, out.string.chomp
+  end
+
+  it "shows setup instructions" do
+    pdf_tool = Object.new
+    pdf_tool.define_singleton_method(:available?) do true; end
+    pdf_tool.define_singleton_method(:cmd) do "Funky Monkey" end
+
+    out = capture_stdout do
+      BrandEins::Setup.new( pdf_tool: pdf_tool ).run
+    end
+
+    assert !!out.string.chomp.match("you have Funky Monkey running"), "Missing Funky Monkey"
   end
 
   it "runs pdftk" do
