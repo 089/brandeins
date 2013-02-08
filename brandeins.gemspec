@@ -1,6 +1,6 @@
 # -*- encoding: utf-8 -*-
 $:.push File.expand_path("../lib", __FILE__)
-require "brandeins/version"
+load File.expand_path("../lib/brandeins/version.rb", __FILE__)
 
 Gem::Specification.new do |s|
   s.name        = "brandeins"
