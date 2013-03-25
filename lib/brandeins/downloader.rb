@@ -69,12 +69,11 @@ module BrandEins
       pdf_files = download(pdf_links)
 
       pdf_cover = create_cover_pdf(year, volume)
-      pdf_files = pdf_files.reverse.push(pdf_cover).reverse
+      pdf_files = pdf_files.unshift(pdf_cover)
 
-      if !@pdftool.nil?
+      if @pdftool
         target_pdf_path = "#{@dl_dir}/#{target_pdf}"
-        @pdftool.merge_pdf_files(pdf_files, target_pdf_path)
-        cleanup
+        @pdftool.merge_pdf_files(pdf_files, target_pdf_path) && cleanup
       else
         puts 'brandeins wont merge the single pdf files since it didnt find an appropriate pdf tool' if $BE_VERBOSE
       end

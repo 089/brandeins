@@ -4,7 +4,7 @@ module BrandEins
   class Setup
 
     def initialize(env = {})
-      @os = env[:os] || RUBY_PLATFORM
+      @os       = env[:os] || RUBY_PLATFORM
       @pdf_tool = env[:pdf_tool] || BrandEins::Merger::PdfTools.get_pdf_tool(env)
     end
 

@@ -2,7 +2,7 @@
 
 module BrandEins
   module Merger
-    module Templates
+    module External
 
       class Base
 
@@ -29,7 +29,11 @@ module BrandEins
 
         private
         def _exec (cmd)
-          IO.popen(cmd)
+          IO.popen(cmd) do |io|
+            io.each do |line|
+              puts line
+            end
+          end
         end
 
         def _cmd_available? (cmd, args)

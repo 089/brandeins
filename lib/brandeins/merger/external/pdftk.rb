@@ -2,9 +2,9 @@
 
 module BrandEins
   module Merger
-    module Templates
+    module External
 
-      class PdftkOSX < BrandEins::Merger::Templates::OSX
+      class Pdftk < BrandEins::Merger::External::Base
 
         def cmd
           'pdftk'

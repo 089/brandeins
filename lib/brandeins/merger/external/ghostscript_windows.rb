@@ -2,9 +2,9 @@
 
 module BrandEins
   module Merger
-    module Templates
+    module External
 
-      class GhostscriptWin < BrandEins::Merger::Templates::Windows
+      class GhostscriptWindows < BrandEins::Merger::External::Base
 
         def cmd
           'gswin64c.exe'
