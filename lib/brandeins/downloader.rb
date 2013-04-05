@@ -1,8 +1,9 @@
 # encoding: utf-8
-require 'brandeins/parser/article_site'
-require 'brandeins/parser/magazine_site'
-require 'brandeins/parser/archive_site'
-require 'brandeins/merger/pdf_tools'
+require_relative 'parser/article_site'
+require_relative 'parser/magazine_site'
+require_relative 'parser/archive_site'
+require_relative 'merger/pdf_tools'
+
 require 'net/http'
 require 'prawn'
 
@@ -12,11 +13,13 @@ module BrandEins
     def initialize(path, opts = {})
       $BE_VERBOSE = !!opts[:verbose]
 
-      @url     = 'http://www.brandeins.de'
-      @dl_dir  = path
+      @url     = opts[:base_url] || 'http://www.brandeins.de'
+      @dl_dir  = opts[:path]     || path
+
       @tmp_dir = @dl_dir + '/brand-eins-tmp'
       @pdftool = BrandEins::Merger::PdfTools.get_pdf_tool
-      @archive = BrandEins::Parser::ArchiveSite.new(@url)
+      @archive = BrandEins::Parser::ArchiveSite.new(@url, opts)
+      # should be lazily done, or?
       create_tmp_dirs
     end
 
@@ -32,6 +35,8 @@ module BrandEins
     end
 
     def get_magazine(year = 2000, volume = 1)
+      # doesnt handle edge cases
+      # a) there is no volume
       puts "Parsing Volume #{volume} of #{year}" if $BE_VERBOSE
       target_pdf = pdf_filename(year, volume)
       magazine_links = @archive.get_magazine_links_by_year(year)
@@ -40,6 +45,7 @@ module BrandEins
     end
 
     private
+
     def create_tmp_dirs
       FileUtils.mkdir_p @tmp_dir unless File.directory?(@tmp_dir)
     end
@@ -87,8 +93,7 @@ module BrandEins
       pdf_links.each_with_object([]) do |pdf_link, pdf_files|
         pdf_filename = @tmp_dir + '/' + File.basename(pdf_link)
         pdf_url = pdf_link
-        download_pdf(pdf_url, pdf_filename)
-        pdf_files << pdf_filename
+        download_pdf(pdf_url, pdf_filename) and pdf_files << pdf_filename
       end
     end
 
@@ -99,7 +104,11 @@ module BrandEins
       end
 
       puts "Downloading PDF from #{pdf_url} to #{pdf_filename}" if $BE_VERBOSE
-      IO.binwrite(pdf_filename, Net::HTTP.get(URI(pdf_url)))
+      begin
+        IO.binwrite(pdf_filename, Net::HTTP.get(URI(pdf_url)))
+      rescue
+        return false
+      end
     end
 
     def cleanup

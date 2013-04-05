@@ -7,15 +7,17 @@ module BrandEins
     class ArchiveSite
 
       def initialize(base_url, opts = {})
+        @opts        = opts || {}
         @base_url    = base_url
-        @archive_url = @base_url + "/archiv.html"
-        if html = opts[:html]
-          @doc = Nokogiri::HTML(html)
-        end
+        @archive_url = opts[:archive_url] || @base_url + "/archive.html"
       end
 
       def doc
-        @doc || @doc = Nokogiri::HTML(Net::HTTP.get(URI(@archive_url)))
+        @doc ||= Nokogiri::HTML(html)
+      end
+
+      def html
+        @opts[:html] || Net::HTTP.get(URI(@archive_url))
       end
 
       def get_magazine_links_by_year(year = 2000)
@@ -43,8 +45,7 @@ module BrandEins
       end
 
       def magazine_pdf_links(url)
-        magazine = BrandEins::Parser::MagazineSite.new(url, @base_url)
-        magazine.get_magazine_pdf_links
+        BrandEins::Parser::MagazineSite.new(url, @base_url).get_magazine_pdf_links
       end
 
     end

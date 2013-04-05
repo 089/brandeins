@@ -1,7 +1,7 @@
 # encoding: utf-8
-require 'brandeins/merger/external/base'
-require 'brandeins/merger/external/pdftk'
-require 'brandeins/merger/external/ghostscript_windows'
+require_relative 'external/base'
+require_relative 'external/pdftk'
+require_relative 'external/ghostscript_windows'
 
 module BrandEins
   module Merger

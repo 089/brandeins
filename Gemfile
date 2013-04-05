@@ -6,7 +6,7 @@ group :test do
   end
   gem 'webmock'
   gem 'debugger'
+  gem 'fakefs', require: 'fakefs/safe'
 end
-
 
 gemspec

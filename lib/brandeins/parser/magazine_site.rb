@@ -11,7 +11,11 @@ module BrandEins
       end
 
       def doc
-        @doc || @doc = Nokogiri::HTML(Net::HTTP.get(URI(@url)))
+        @doc ||= Nokogiri::HTML(html)
+      end
+
+      def html
+        @html ||= Net::HTTP.get(URI(@url))
       end
 
       def get_magazine_pdf_links
