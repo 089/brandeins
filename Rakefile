@@ -1,9 +1,13 @@
 require 'bundler/gem_tasks'
 require 'rake/testtask'
+require 'rubocop/rake_task'
+require 'rspec/autorun'
 
-Rake::TestTask.new do |t|
-  t.test_files = FileList['test/**/*_test.rb', 'specs/**/*_spec.rb']
-  t.verbose    = true
+Rubocop::RakeTask.new
+
+Rake::TestTask.new(:spec) do |t|
+  t.pattern = 'spec/lib/**/*_spec.rb'
+  t.verbose = true
 end
 
 task :install do
@@ -32,4 +36,4 @@ rule /^version:bump:(major|minor|patch)/ do |t|
   sh "git add #{file} Gemfile.lock && git commit -m 'bump version to #{new_version}'"
 end
 
-task :default => :test
+task default: :spec

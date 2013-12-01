@@ -12,7 +12,6 @@ Gem::Specification.new do |s|
   s.description = %q{BrandEins gem offers a download command to download a specific or all volumes. Use `brandeins help` to find out more about it}
 
   s.add_dependency "rake"
-  s.add_dependency "thor"
   s.add_dependency "nokogiri"
   s.add_dependency "prawn"
 
