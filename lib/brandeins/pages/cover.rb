@@ -36,25 +36,30 @@ module BrandEins
                    align: :center,
                    inline_format: true
           if image
-            pdf.image image, position: :center, vposition: :center
+            # TODO: get Null Byte?
+            # pdf.image image, position: :center, vposition: :center
           end
         end.render
       end
 
       def save_to(path)
-        @path = path
-        File.open(file_path, 'w') do |file|
-          file.write to_pdf
-        end
-        file_path
+        cover_file_path = cover_file_path_for_path(path)
+        return cover_file_path if File.exists? cover_file_path
+        File.binwrite(cover_file_path, to_pdf)
+        cover_file_path
       end
+        # File.open(file_path, 'w') do |file|
+        #   file.write to_pdf
+        # end
+        # file_path
+      # end
 
-      def file_path
-        Pathname.new(@path) + file_name
+      def cover_file_path_for_path(path)
+        Pathname.new(path) + file_name
       end
 
       def file_name
-        "magazine-cover-#{@magazine.mont}-#{@magazine.year}.pdf"
+        "magazine-cover-#{@magazine.month}-#{@magazine.year}.pdf"
       end
 
       def fetcher

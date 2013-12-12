@@ -6,7 +6,6 @@ require 'nokogiri'
 require_relative '../config'
 require_relative '../utils/fetcher'
 require_relative '../pages/article'
-require_relative '../merger/pdf_tools'
 
 module BrandEins
   module Pages
@@ -120,15 +119,18 @@ module BrandEins
       end
 
       def save_articles_to(path)
-        @path = path
         article_pdf_urls.each_with_object([]) do |pdf_url, pdf_files|
           pdf = fetcher.fetch(pdf_url)
-          file_path = Pathname.new(@path) + file_name_for_pdf_url(pdf_url)
-          File.open(file_path, 'w') do |file|
-            file.write pdf
-          end
+          file_path = file_path_for_pdf(path, pdf_url)
+          File.binwrite(file_path, pdf)
           pdf_files << file_path
         end
+      end
+
+      def file_path_for_pdf(path, pdf_url)
+        target_path = Pathname.new(path)
+        target_path.mkpath
+        file_path = target_path + file_name_for_pdf_url(pdf_url)
       end
 
       def file_name_for_pdf_url(pdf_url)

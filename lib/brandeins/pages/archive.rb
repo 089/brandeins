@@ -29,7 +29,11 @@ module BrandEins
       end
 
       def html
-        @html ||= fetcher.fetch(archive_url)
+        cli.info "Loading the archive" do
+          @html ||= fetcher.fetch(archive_url)
+        end
+      rescue BrandEins::Utils::Fetcher::ContentNotFetchedError => e
+        raise e, "Could not download the archiv.html (May be the URL changed?)\n=> Original error: #{e.message}", e.backtrace
       end
 
       def magazines_for_year(year)
@@ -76,6 +80,10 @@ module BrandEins
 
       def fetcher
         @fetcher ||= BrandEins::Utils::Fetcher.instance
+      end
+
+      def cli
+        @cli ||= BrandEins::Utils::CliOutput.instance
       end
 
     end

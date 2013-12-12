@@ -1,5 +1,7 @@
 # encoding: utf-8
 
+require_relative '../../utils/cli_output'
+
 module BrandEins
   module Merger
     module External
@@ -16,15 +18,21 @@ module BrandEins
 
         def merge_pdf_files(pdf_files, target_pdf)
           begin
-            pdf_files_arg = pdf_files.map {|pdf_file| "'#{pdf_file}'" }.join ' '
-            args = self.args.join(' ').gsub(/__pdf_files__/, pdf_files_arg).gsub(/__target_pdf__/, target_pdf)
-            puts "executing: #{cmd} #{args}"
-            _exec("#{cmd} #{args}")
+            pdf_files_arg = pdf_files.map {|pdf_file| "'#{pdf_file.to_s}'" }.join ' '
+            args = self.args.join(' ').gsub(/__pdf_files__/, pdf_files_arg).gsub(/__target_pdf__/, target_pdf.to_s)
+            cli.info "Running PDF Merger for #{target_pdf}"
+            cli.debug "Executing: #{cmd} #{args}" do
+              _exec("#{cmd} #{args}")
+            end
           rescue Exception => e
-            puts "error: #{e.inspect}"
+            cli.error "Error when merging file: #{e.inspect}"
             return false
           end
           return true
+        end
+
+        def cli
+          @cli ||= BrandEins::Utils::CliOutput.instance
         end
 
         private

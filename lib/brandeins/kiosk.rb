@@ -3,6 +3,7 @@ require 'pathname'
 require_relative 'config'
 require_relative 'utils/fetcher'
 require_relative 'pages/archive'
+require_relative 'pages/cover'
 require_relative 'merger/pdf_tools'
 
 require 'byebug'
@@ -10,17 +11,31 @@ require 'byebug'
 module BrandEins
   # Usage of
   class Kiosk
-    attr_reader :path
+    attr_reader :target_path
 
     class InvalidPathError < StandardError; end
 
     def initialize(opts = {})
-      @path = opts.fetch(:path) { Pathname.new('.').realpath.to_s }
+      opts = opts.to_h
+      @target_path = opts.fetch(:path) { Pathname.new('.').realpath.to_s }
       raise_if_path_inaccessible
+      set_opts_for_cli_output(opts)
+      create_directories_if_necessary
+    end
+
+    def create_directories_if_necessary
+      cache_path.mkpath unless cache_path.exist?
+      temp_path.mkpath unless temp_path.exist?
+    end
+
+    def set_opts_for_cli_output(opts)
+      cli_output_opts = {}
+      cli_output_opts[:debug] = !!opts[:verbose]
+      cli.set_options(cli_output_opts)
     end
 
     def raise_if_path_inaccessible
-      path = Pathname.new(@path)
+      path = Pathname.new(@target_path)
       if !path.writable?
         raise InvalidPathError, 'Could not access the given path'
       end
@@ -34,12 +49,12 @@ module BrandEins
       # 2. Run pdf merge with target path
       article_pdfs = magazine.save_articles_to temp_path
       cover_pdf    = cover.save_to temp_path
-      pdf_files    = article_pdfs << cover_pdf
+      pdf_files    = article_pdfs.unshift(cover_pdf)
       merger.merge_pdf_files pdf_files, magazine_file_path(month: month, year: year)
     end
 
     def magazine_file_path(month: nil, year: nil)
-      Pathname.new(@path) + "brandeins-#{month}-#{year}.pdf"
+      Pathname.new(@target_path) + "brandeins-#{month}-#{year}.pdf"
     end
 
     def merger
@@ -47,17 +62,19 @@ module BrandEins
     end
 
     def temp_path
-      @temp_path ||= get_temp_path
+      BrandEins::Config['temp_path']
     end
 
-    def get_temp_path
-      file = Tempfile.new
-      path = Pathname.new(file.path)
-      path.to_s
+    def cache_path
+      BrandEins::Config['cache_path']
     end
 
     def archive
       @archive ||= BrandEins::Pages::Archive.new
+    end
+
+    def cli
+      @cli ||= BrandEins::Utils::CliOutput.instance
     end
 
   end

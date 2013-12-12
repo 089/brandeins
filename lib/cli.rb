@@ -34,6 +34,9 @@ module BrandEins
 
       @kiosk = BrandEins::Kiosk.new(@options)
       @kiosk.fetch_magazine(month: @options.month, year: @options.year)
+      rescue BrandEins::Utils::Fetcher::ContentNotFetchedError => e
+        puts "Download Error: #{e}\n\n"
+        puts "#{e.backtrace.join('\n')}"
     end
 
     def validate_options
@@ -51,11 +54,11 @@ module BrandEins
         opts.banner = "Usage: brandeins download --month n --year n"
         opts.separator ""
 
-        opts.on('--month month', Integer, "The publication month of the magazine. E.g. for may: '5'") do |month|
+        opts.on('-m MONTH', '--month month', Integer, "The publication month of the magazine. E.g. for may: '5'") do |month|
           @options.month = month
         end
 
-        opts.on('--year YEAR', Integer, "The publication year of the magazine. E.g. the current year '#{Time.now.year}'") do |year|
+        opts.on('-y YEAR', '--year YEAR', Integer, "The publication year of the magazine. E.g. the current year '#{Time.now.year}'") do |year|
           @options.year = year
         end
 
@@ -68,7 +71,11 @@ module BrandEins
           exit
         end
 
-        opts.on('-v', '--version', 'Show the version') do
+        opts.on('-v', '--verbose', 'Be verbose') do |verbose|
+          @options.verbose = verbose
+        end
+
+        opts.on('--version', 'Show the version') do
           puts BrandEins::VERSION
           exit
         end
