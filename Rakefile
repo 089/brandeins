@@ -19,7 +19,7 @@ task install: [ :load_version_file ] do
   sh "gem install ./pkg/brandeins-#{BrandEins::VERSION}.gem"
 end
 
-task install: [ :load_version_file, :build ] do
+task publish: [ :load_version_file, :build ] do
   sh "gem push ./pkg/brandeins-#{BrandEins::VERSION}.gem"
 end
 
