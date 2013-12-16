@@ -7,9 +7,9 @@ module BrandEins
     # Used to parse Cli input
     class CliOptionParser
       def self.parse(args = ARGV)
-        options = OpenStruct.new
-        options.cmd = ARGV.first
-        opt_parser = parser(options)
+        options     = OpenStruct.new
+        options.cmd = args.first
+        opt_parser  = parser(options)
         opt_parser.parse!(args)
         options
       end
