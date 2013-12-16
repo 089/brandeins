@@ -28,6 +28,15 @@ brandeins download --path=/Path/where/to/download/the/files --year=2013 --month=
 ```
 
 
+Thanks to brand eins
+--------
+I am a huge fan of the journal and use this tool to be able to read them on my iPad. If you also like the journal and download their articles through this gem you should consider supporting them through flattr (This goes to the journal, not me!):
+
+* [Brand eins Flattr Page](http://flattr.com/profile/brandeins)
+* [![Flattr brandeins](http://api.flattr.com/button/flattr-badge-large.png)](http://flattr.com/thing/1175113/brandeins)
+
+
+
 Development
 --------
 Pull requests are very welcome! Please try to follow these simple rules if applicable:
