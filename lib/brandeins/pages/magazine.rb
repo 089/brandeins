@@ -89,20 +89,16 @@ module BrandEins
       end
 
       def parse_year
-        if issue_text.match /Ausgabe (?:.+)\/(.+)/
-          $+.to_i
-        end
+        issue_text.match(/Ausgabe (?:.+)\/(.+)/) and $+.to_i
       end
 
       def parse_month
-        if issue_text.match /Ausgabe (.+)\/(?:.+)/
-          $+.to_i
-        end
+        issue_text.match(/Ausgabe (.+)\/(?:.+)/) and $+.to_i
       end
 
       def issue_text
         node = document.css('.current-issue h3').last
-        text = node.children.first.text
+        node.children.first.text
       end
 
       def parse_url
@@ -129,12 +125,12 @@ module BrandEins
       def file_path_for_pdf(path, pdf_url)
         target_path = Pathname.new(path)
         target_path.mkpath
-        file_path = target_path + file_name_for_pdf_url(pdf_url)
+        target_path + file_name_for_pdf_url(pdf_url)
       end
 
       def file_name_for_pdf_url(pdf_url)
-        uri_path  = URI(pdf_url).path
-        file_name = File.basename(uri_path)
+        uri_path = URI(pdf_url).path
+        File.basename(uri_path)
       end
 
       def cli

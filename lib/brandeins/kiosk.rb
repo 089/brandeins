@@ -14,7 +14,7 @@ module BrandEins
   class Kiosk
     attr_reader :target_path
 
-    class InvalidPathError < StandardError; end
+    InvalidPathError = Class.new StandardError
 
     def initialize(opts = {})
       @target_path = opts.fetch(:path) { Pathname.new('.').realpath.to_s }
@@ -36,16 +36,16 @@ module BrandEins
 
     def raise_if_path_inaccessible
       path = Pathname.new(@target_path)
-      path.writable? or raise InvalidPathError, 'Could not access the given path'
+      path.writable? or raise InvalidPathError, 'Cannot access the given path'
     end
 
     def download_magazine(month, year)
       magazine           = fetch_magazine(month, year)
       cover_pdf_path     = download_cover(magazine)
       article_pdf_paths  = download_article_pdfs(magazine)
-      magazine_pdf_files = article_pdfs.unshift(cover_pdf)
+      magazine_pdf_paths = article_pdf_paths.unshift(cover_pdf_path)
       magazine_file_path = magazine_file_path(month, year)
-      merger.merge_pdf_files(pdf_files, magazine_file_path)
+      merger.merge_pdf_files(magazine_pdf_paths, magazine_file_path)
       clear_temp_path
       magazine_file_path
     end

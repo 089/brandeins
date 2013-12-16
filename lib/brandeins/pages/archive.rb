@@ -65,7 +65,7 @@ module BrandEins
 
       def extract_magazine_month(figure)
         meta = figure.css('.meta').first
-        meta.text.match(/(?:.+)(\d{2})\/(?:.+)/) && $+.to_i
+        meta.text.match(/(?:.+)(\d{2})\/(?:.+)/) and $+.to_i
       end
 
       def brandeins_url

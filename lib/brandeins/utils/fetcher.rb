@@ -12,6 +12,7 @@ require_relative 'cli_output'
 module BrandEins
   module Utils
 
+    # Used as a centralized resource fetcher with a caching mechanism
     class Fetcher
       include Singleton
 
@@ -86,7 +87,10 @@ module BrandEins
       end
 
       def cache_size_in_bytes
-        cache_files.reduce(0) { |sum, (file, _)| next unless file; sum += File.size?(file) || 0 }
+        cache_files.reduce(0) do |sum, (file, _)|
+          next unless file
+          sum += File.size?(file) || 0
+        end
       end
 
       def remove_oldest_cache_file
@@ -103,7 +107,13 @@ module BrandEins
       end
 
       def cache_files
-        @cache_files ||= Hash[Dir[cache_path + './*'].map { |f| [ f, File.mtime(f) ] }]
+        @cache_files ||= begin
+                           files = Dir[cache_path + './*']
+                           files_with_mtime = files.map do |file_path|
+                             [file_path, File.mtime(file_path)]
+                           end
+                           Hash[files_with_mtime]
+                         end
       end
 
       def cli

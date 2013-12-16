@@ -1,13 +1,9 @@
 require 'bundler/gem_tasks'
-require 'rake/testtask'
 require 'rubocop/rake_task'
+require 'rspec/core/rake_task'
 
 Rubocop::RakeTask.new
-
-Rake::TestTask.new(:spec) do |t|
-  t.pattern = 'spec/lib/**/*_spec.rb'
-  t.verbose = true
-end
+RSpec::Core::RakeTask.new(:spec)
 
 task :load_version_file do
   require_relative './lib/brandeins/version'

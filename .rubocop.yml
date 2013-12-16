@@ -3,3 +3,12 @@ AllCops:
     - Rakefile
   Excludes:
     - vendor/**
+
+AndOr:
+   Enabled: false
+
+AssignmentInCondition:
+    Enabled: false
+
+SingleLineBlockParams:
+    Enabled: false

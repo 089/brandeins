@@ -1,14 +1,17 @@
+# encoding: utf-8
+
 require 'ostruct'
 
 module BrandEins
+  # Used to parse Cli input
   class CliOptionParser
     def self.parse(args = ARGV)
       options = OpenStruct.new
       opt_parser = OptionParser.new do |opts|
-        opts.banner = "Usage: brandeins download --month n --year n"
-        opts.separator ""
+        opts.banner = 'Usage: brandeins download --month n --year n'
+        opts.separator ''
 
-        opts.on('-m MONTH', '--month month', Integer, "The publication month of the magazine. E.g. for may: '5'") do |month|
+        opts.on('-m MONTH', '--month month', Integer, 'The publication month of the magazine. E.g. for may: "5"') do |month|
           options.month = month
         end
 

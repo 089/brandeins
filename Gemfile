@@ -7,9 +7,7 @@ group :test do
 end
 
 group :debug do
-  if RUBY_VERSION.split('.').first.to_i > 1
-    gem 'byebug'
-  end
+  gem 'byebug'
 end
 
 gemspec

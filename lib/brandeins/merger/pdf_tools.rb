@@ -1,4 +1,5 @@
 # encoding: utf-8
+
 require_relative 'external/base'
 require_relative 'external/pdftk'
 require_relative 'external/ghostscript_windows'

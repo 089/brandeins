@@ -5,6 +5,7 @@ require 'io/console'
 
 module BrandEins
   module Utils
+    # Used to print status messages to the cli
     class CliOutput
       include Singleton
 

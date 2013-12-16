@@ -2,4 +2,4 @@
 
 require 'brandeins'
 
-BrandEins::Cli.run
+BrandEins::Cli.run(ARGV)

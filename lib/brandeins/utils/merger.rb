@@ -1,3 +1,5 @@
+# encoding: utf-8
+
 require 'singleton'
 require 'prawn'
 
@@ -5,11 +7,9 @@ require_relative './cli_output'
 
 module BrandEins
   module Utils
+    # Testing Prawn for merging pdfs
     class Merger
       include Singleton
-
-      def initialize
-      end
 
       def merge_pdf_files(pdf_file_paths, target_pdf)
         cli.info "Merging pdf files to: #{target_pdf}" do

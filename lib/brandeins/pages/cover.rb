@@ -7,6 +7,7 @@ require_relative '../utils/fetcher'
 
 module BrandEins
   module Pages
+    # Represents the magazine cover
     class Cover
 
       def initialize(magazine)
@@ -23,7 +24,7 @@ module BrandEins
 
       def to_pdf
         cover_image = download_cover_image
-        cover_pdf   = create_cover_pdf(cover_image)
+        create_cover_pdf(cover_image)
       end
 
       def download_cover_image
@@ -47,7 +48,6 @@ module BrandEins
         return cover_file_path if File.exists? cover_file_path
         File.binwrite(cover_file_path, to_pdf)
         cover_file_path
-      rescue BrandEins::Utils::Fetcher::ContentNotFetchedError => e
       end
 
       def cover_file_path_for_path(path)

@@ -6,6 +6,7 @@ require_relative '../config'
 
 module BrandEins
   module Pages
+    # Represents an article of a magazine
     class Article
 
       def initialize(html)
