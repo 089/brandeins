@@ -26,27 +26,27 @@ module BrandEins
       send options.cmd, options
     end
 
-    def version(opts = {})
+    def version(options)
       puts BrandEins::VERSION
     end
 
-    def help(opts = {})
+    def help(options)
       puts BrandEins::Utils::CliOptionParser.parser
     end
 
-    def setup(opts = {})
+    def setup(options)
       puts 'You need to install pdftk in order to merge the downloaded pdfs.'
       puts 'Either download it from their website or use a package manager like'
       puts 'homebrew to install it on your system.'
     end
 
-    def download(opts = {})
-      errors = validate_options(opts)
+    def download(options)
+      errors = validate_options(options)
       abort errors.join("\n") if errors.size > 0
 
-      month = opts.fetch(:month)
-      year  = opts.fetch(:year)
-      kiosk = BrandEins::Kiosk.new(opts)
+      month = options.month
+      year  = options.year
+      kiosk = BrandEins::Kiosk.new(options.to_h)
       kiosk.download_magazine(month, year)
     rescue BrandEins::Utils::Fetcher::ContentNotFetchedError => e
       puts "Download Error: #{e}\n\n"
