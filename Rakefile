@@ -10,13 +10,16 @@ Rake::TestTask.new(:spec) do |t|
   t.verbose = true
 end
 
-task :install do
-  require './lib/brandeins/version'
+task :load_version_file do
+  require_relative './lib/brandeins/version'
+end
+
+task install: [ :load_version_file ] do
+  require_relative './lib/brandeins/version'
   sh "gem install ./pkg/brandeins-#{BrandEins::VERSION}.gem"
 end
 
-task publish: [ :build ] do
-  require './lib/brandeins/version'
+task install: [ :load_version_file, :build ] do
   sh "gem push ./pkg/brandeins-#{BrandEins::VERSION}.gem"
 end
 
