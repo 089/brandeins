@@ -8,8 +8,8 @@ module BrandEins
     class CliOptionParser
       def self.parse(args = ARGV)
         options = OpenStruct.new
-        options.download = true if ARGV.first == 'download'
-        opt_parser = self.parser(options)
+        options.cmd = ARGV.first
+        opt_parser = parser(options)
         opt_parser.parse!(args)
         options
       end
@@ -33,7 +33,7 @@ module BrandEins
             end
 
             opts.on('-h', '--help', 'Show this message') do |help|
-              options.help = help
+              options.cmd = help
             end
 
             opts.on('-v', '--verbose', 'Be verbose') do |verbose|
@@ -41,7 +41,7 @@ module BrandEins
             end
 
             opts.on('--version', 'Show the version') do |version|
-              options.version = version
+              options.cmd = version
             end
           end
         end

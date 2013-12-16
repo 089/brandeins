@@ -22,21 +22,22 @@ module BrandEins
 
     def run
       options = BrandEins::Utils::CliOptionParser.parse(@args)
-      if options.version
-        puts BrandEins::VERSION and return
-      end
-      if options.help
-        puts BrandEins::Utils::CliOptionParser.parser
-      end
-      if options.download
-        errors = validate_options(options)
-        puts errors.join("\n") && return unless errors.empty?
-        opts = options.to_h
-        download(opts)
-      end
+      abort 'Unknown command' unless %w[help version download].include? options.cmd
+      send options.cmd, options
+    end
+
+    def version(opts = {})
+      puts BrandEins::VERSION
+    end
+
+    def help(opts = {})
+      puts BrandEins::Utils::CliOptionParser.parser
     end
 
     def download(opts = {})
+      errors = validate_options(opts)
+      abort errors.join("\n") if errors.size > 0
+
       month = opts.fetch(:month)
       year  = opts.fetch(:year)
       kiosk = BrandEins::Kiosk.new(opts)
