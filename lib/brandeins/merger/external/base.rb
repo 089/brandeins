@@ -1,5 +1,7 @@
 # encoding: utf-8
 
+require 'shellwords'
+
 require_relative '../../utils/cli_output'
 
 module BrandEins
@@ -17,11 +19,12 @@ module BrandEins
         def args; raise "Must be implemtented by the subclasses"; end
 
         def merge_pdf_files(pdf_files, target_pdf)
+          # TODO: This is terrible. Use shellwords.shellescape!
           begin
             pdf_files_arg = pdf_files.map {|pdf_file| "'#{pdf_file.to_s}'" }.join ' '
-            args = self.args.join(' ').gsub(/__pdf_files__/, pdf_files_arg).gsub(/__target_pdf__/, target_pdf.to_s)
+            args = self.args.join(' ').gsub(/__pdf_files__/, pdf_files_arg).gsub(/__target_pdf__/, "'#{target_pdf.to_s}'")
             cli.info "Running PDF Merger for #{target_pdf}"
-            cli.debug "Executing: #{cmd} #{args}" do
+            cli.debug "Executing: `#{cmd} #{args}`" do
               _exec("#{cmd} #{args}")
             end
           rescue Exception => e
@@ -35,7 +38,6 @@ module BrandEins
           @cli ||= BrandEins::Utils::CliOutput.instance
         end
 
-        private
         def _exec (cmd)
           IO.popen(cmd) do |io|
             io.each do |line|
