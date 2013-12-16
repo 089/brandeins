@@ -8,7 +8,7 @@ require_relative '../brandeins'
 require_relative '../brandeins/utils/cli_option_parser'
 
 module BrandEins
-  class CLI
+  class Cli
     include Singleton
 
     def self.run(args)
