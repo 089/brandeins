@@ -49,7 +49,7 @@ module BrandEins
       magazine_file_path = magazine_file_path(month, year)
       merger.merge_pdf_files(magazine_pdf_paths, magazine_file_path)
       clear_temp_path
-      cli.info "Successfully downloaded: #{@magazine_file_path}"
+      cli.info "Successfully downloaded: #{magazine_file_path}"
       magazine_file_path
     end
 
