@@ -50,15 +50,15 @@ module BrandEins
         out.flush
       end
 
-      def print(msg)
-        msg = conformize(msg)
-        out.write msg
+      def print(msg, opts = {})
+        msg = conformize(msg) unless opts[:full_length]
+        out.write(msg)
         out.flush
       end
 
-      def println(msg)
+      def println(msg, opts = {})
         msg += "\n" unless msg.end_with? "\n"
-        print msg
+        print(msg, opts)
       end
 
       def console_width
@@ -76,7 +76,7 @@ module BrandEins
       end
 
       def debug(msg, &block)
-        println msg if debug?
+        println(msg, full_length: true) if debug?
         block.call if block_given?
       end
 
