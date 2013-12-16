@@ -17,7 +17,7 @@ module BrandEins
       def self.parser(options = {})
         @@parser ||= begin
           OptionParser.new do |opts|
-            opts.banner = 'Usage: brandeins download --month n --year n'
+            opts.banner = 'Usage: brandeins download --path ~/Documents --month n --year n'
             opts.separator ''
 
             opts.on('-m MONTH', '--month month', Integer, 'The publication month of the magazine. E.g. for may: "5"') do |month|
