@@ -5,6 +5,7 @@ require 'nokogiri'
 
 require_relative '../config'
 require_relative '../utils/fetcher'
+require_relative '../utils/cli_output'
 require_relative '../pages/article'
 
 module BrandEins
@@ -42,8 +43,9 @@ module BrandEins
       def article_pdf_urls
         @article_pdf_urls ||= article_urls.map do |article_url|
           article_html = fetcher.fetch(article_url)
-          BrandEins::Pages::Article.new(article_html).pdf_url
-        end
+          article = BrandEins::Pages::Article.new(article_html)
+          article.pdf_url or cli.info "No PDF for: \"#{article.title}\""
+        end.compact
       end
 
       def cover_url
@@ -136,6 +138,10 @@ module BrandEins
       def file_name_for_pdf_url(pdf_url)
         uri_path  = URI(pdf_url).path
         file_name = File.basename(uri_path)
+      end
+
+      def cli
+        @cli ||= BrandEins::Utils::CliOutput.instance
       end
 
     end
