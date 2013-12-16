@@ -22,7 +22,7 @@ module BrandEins
 
     def run
       options = BrandEins::Utils::CliOptionParser.parse(@args)
-      abort 'Unknown command' unless %w[help version download].include? options.cmd
+      abort 'Unknown command' unless %w[help version setup download].include? options.cmd
       send options.cmd, options
     end
 
@@ -32,6 +32,12 @@ module BrandEins
 
     def help(opts = {})
       puts BrandEins::Utils::CliOptionParser.parser
+    end
+
+    def setup(opts = {})
+      puts 'You need to install pdftk in order to merge the downloaded pdfs.'
+      puts 'Either download it from their website or use a package manager like'
+      puts 'homebrew to install it on your system.'
     end
 
     def download(opts = {})
