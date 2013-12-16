@@ -7,6 +7,9 @@ group :test do
   gem 'fakefs', require: 'fakefs/safe'
   gem 'byebug'
   gem 'rubocop'
+  if RUBY_VERSION.split('.').first.to_i > 1
+    gem 'byebug'
+  end
 end
 
 gemspec
