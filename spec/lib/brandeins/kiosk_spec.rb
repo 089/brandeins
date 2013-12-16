@@ -1,6 +1,8 @@
 # encoding: utf-8
 
-require 'spec_helper'
+require_relative '../../spec_helper'
+
+require_lib 'brandeins'
 require_lib 'brandeins/config'
 require_lib 'brandeins/kiosk'
 

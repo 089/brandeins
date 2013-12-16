@@ -16,7 +16,6 @@ module BrandEins
     class InvalidPathError < StandardError; end
 
     def initialize(opts = {})
-      opts = opts.to_h
       @target_path = opts.fetch(:path) { Pathname.new('.').realpath.to_s }
       raise_if_path_inaccessible
       set_opts_for_cli_output(opts)
@@ -41,19 +40,32 @@ module BrandEins
       end
     end
 
-    def fetch_magazine(month: nil, year: nil)
-      magazine = archive.magazine_for(month: month, year: year)
-      cover = BrandEins::Pages::Cover.new(magazine)
-      # 1. Download articles to temp path
-      # 2. Create cover if possible
-      # 2. Run pdf merge with target path
-      article_pdfs       = magazine.save_articles_to(temp_path)
-      cover_pdf          = cover.save_to(temp_path)
-      pdf_files          = article_pdfs.unshift(cover_pdf)
+    def download_magazine(month: nil, year: nil)
+      magazine           = fetch_magazine(month: month, year: year)
+      cover_pdf_path     = download_cover(magazine)
+      article_pdf_paths  = download_article_pdfs(magazine)
+      magazine_pdf_files = article_pdfs.unshift(cover_pdf)
+      merge_pdf_files(magazine_pdf_files)
+    end
+
+    def merge_pdf_files(pdf_files)
       magazine_file_path = magazine_file_path(month: month, year: year)
       merger.merge_pdf_files(pdf_files, magazine_file_path)
       clear_temp_path
       magazine_file_path
+    end
+
+    def download_article_pdfs(magazine)
+      magazine.save_articles_to(temp_path)
+    end
+
+    def download_cover(magazine)
+      cover = BrandEins::Pages::Cover.new(magazine)
+      cover.save_to(temp_path)
+    end
+
+    def fetch_magazine(month: nil, year: nil)
+      archive.magazine_for(month: month, year: year)
     end
 
     def magazine_file_path(month: nil, year: nil)

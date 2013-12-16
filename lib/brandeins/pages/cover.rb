@@ -49,11 +49,6 @@ module BrandEins
         cover_file_path
       rescue BrandEins::Utils::Fetcher::ContentNotFetchedError => e
       end
-        # File.open(file_path, 'w') do |file|
-        #   file.write to_pdf
-        # end
-        # file_path
-      # end
 
       def cover_file_path_for_path(path)
         Pathname.new(path) + file_name
