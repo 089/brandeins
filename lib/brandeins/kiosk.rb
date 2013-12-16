@@ -8,8 +8,6 @@ require_relative 'pages/archive'
 require_relative 'pages/cover'
 require_relative 'merger/pdf_tools'
 
-require 'byebug'
-
 module BrandEins
   # Usage of
   class Kiosk

@@ -2,7 +2,6 @@
 
 require 'optparse'
 require 'ostruct'
-require 'byebug'
 
 require 'brandeins'
 
