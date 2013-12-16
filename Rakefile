@@ -15,7 +15,6 @@ task :load_version_file do
 end
 
 task install: [ :load_version_file ] do
-  require_relative './lib/brandeins/version'
   sh "gem install ./pkg/brandeins-#{BrandEins::VERSION}.gem"
 end
 
