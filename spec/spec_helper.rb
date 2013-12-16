@@ -1,4 +1,4 @@
-require 'byebug'
+require 'byebug' if defined? ByeBug
 require 'webmock/rspec'
 require_relative 'support/capture_stdout'
 
