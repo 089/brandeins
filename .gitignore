@@ -6,4 +6,5 @@
 pkg
 tags
 vendor/ruby
+vendor/bundle
 bin
