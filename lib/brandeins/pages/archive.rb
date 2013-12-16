@@ -24,27 +24,26 @@ module BrandEins
       attr_reader :html
 
       def initialize(opts = {})
-        @html = opts.delete(:html)
+        @html = opts.fetch(:html, nil)
         @magazines = {}
       end
 
       def html
-        cli.info "Loading the archive" do
+        cli.info 'Loading the archive' do
           @html ||= fetcher.fetch(archive_url)
         end
       rescue BrandEins::Utils::Fetcher::ContentNotFetchedError => e
-        raise e, "Could not download the archiv.html (May be the URL changed?)\n=> Original error: #{e.message}", e.backtrace
+        message = 'Could not download the archiv.html (Maybe the URL changed?)'
+        raise e, message + "\n=> Original error: #{e.message}", e.backtrace
       end
 
       def magazines_for_year(year)
         @magazines[year] ||= parse_magazines_for_year(year)
       end
 
-      def magazine_for(month: nil, year: nil)
+      def magazine_for(month, year)
         magazines_for_year(year)[month]
       end
-
-      private
 
       def document
         @document ||= Nokogiri::HTML(html)

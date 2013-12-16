@@ -31,14 +31,14 @@ module BrandEins
             cli.error "Error when merging file: #{e.inspect}"
             return false
           end
-          return true
+          true
         end
 
         def cli
           @cli ||= BrandEins::Utils::CliOutput.instance
         end
 
-        def _exec (cmd)
+        def _exec(cmd)
           IO.popen(cmd) do |io|
             io.each do |line|
               puts line
@@ -46,13 +46,13 @@ module BrandEins
           end
         end
 
-        def _cmd_available? (cmd, args)
+        def _cmd_available?(cmd, args)
           begin
             open("|#{cmd} #{args.join(' ')}").close
-          rescue Exception
+          rescue Errno::ENOENT
             return false
           end
-          return true
+          true
         end
       end
 

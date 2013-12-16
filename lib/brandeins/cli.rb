@@ -36,7 +36,10 @@ module BrandEins
       end
     end
 
-    def download(path: nil, month: nil, year: nil)
+    def download(opts = {})
+      path  = opts.fetch(:path)
+      month = opts.fetch(:month)
+      year  = opts.fetch(:month)
       kiosk = BrandEins::Kiosk.new(path: path)
       kiosk.fetch_magazine(month: month, year: year)
     rescue BrandEins::Utils::Fetcher::ContentNotFetchedError => e

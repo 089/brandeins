@@ -25,9 +25,7 @@ module BrandEins
     class Magazine
 
       def initialize(opts = {})
-        if opts.is_a? String
-          opts = { html: opts }
-        end
+        opts = { html: opts } if opts.is_a? String
         @html = opts[:html]
         @url  = opts[:url]
       end

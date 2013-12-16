@@ -1,9 +1,10 @@
+# encoding: utf-8
+
 require 'pathname'
 require 'fileutils'
 
 require_relative 'config'
 require_relative 'utils/fetcher'
-require_relative 'pages/archive'
 require_relative 'pages/archive'
 require_relative 'pages/cover'
 require_relative 'merger/pdf_tools'
@@ -24,7 +25,7 @@ module BrandEins
 
     def create_directories_if_necessary
       cache_path.mkpath unless cache_path.exist?
-      temp_path.mkpath unless temp_path.exist?
+      temp_path.mkpath  unless temp_path.exist?
     end
 
     def set_opts_for_cli_output(opts)
@@ -35,21 +36,15 @@ module BrandEins
 
     def raise_if_path_inaccessible
       path = Pathname.new(@target_path)
-      if !path.writable?
-        raise InvalidPathError, 'Could not access the given path'
-      end
+      path.writable? or raise InvalidPathError, 'Could not access the given path'
     end
 
-    def download_magazine(month: nil, year: nil)
-      magazine           = fetch_magazine(month: month, year: year)
+    def download_magazine(month, year)
+      magazine           = fetch_magazine(month, year)
       cover_pdf_path     = download_cover(magazine)
       article_pdf_paths  = download_article_pdfs(magazine)
       magazine_pdf_files = article_pdfs.unshift(cover_pdf)
-      merge_pdf_files(magazine_pdf_files)
-    end
-
-    def merge_pdf_files(pdf_files)
-      magazine_file_path = magazine_file_path(month: month, year: year)
+      magazine_file_path = magazine_file_path(month, year)
       merger.merge_pdf_files(pdf_files, magazine_file_path)
       clear_temp_path
       magazine_file_path
@@ -64,11 +59,11 @@ module BrandEins
       cover.save_to(temp_path)
     end
 
-    def fetch_magazine(month: nil, year: nil)
-      archive.magazine_for(month: month, year: year)
+    def fetch_magazine(month, year)
+      archive.magazine_for(month, year)
     end
 
-    def magazine_file_path(month: nil, year: nil)
+    def magazine_file_path(month, year)
       Pathname.new(@target_path) + "brandeins-#{month}-#{year}.pdf"
     end
 

@@ -11,11 +11,11 @@ module BrandEins
         end
 
         def args
-          ['__pdf_files__', 'output', '__target_pdf__']
+          %w[ __pdf_files__ output __target_pdf__ ]
         end
 
         def noop
-          ['--version']
+          %w[ --version ]
         end
 
       end

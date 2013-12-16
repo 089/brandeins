@@ -31,7 +31,7 @@ describe BrandEins::Kiosk do
     end
   end
 
-  describe '#fetch_magazine(month: 1, year: 2013)' do
+  describe '#fetch_magazine(1, 2013)' do
     it 'returns a magzine object' do
       archive_html = load_fixture 'archive.html'
       stub_request(:get, BrandEins::Config['archive_uri']).
@@ -59,7 +59,7 @@ describe BrandEins::Kiosk do
 
 
       kiosk = BrandEins::Kiosk.new
-      magazine = kiosk.fetch_magazine(month: 1, year: 2013)
+      magazine = kiosk.fetch_magazine(1, 2013)
       expect(magazine).to be_a BrandEins::Pages::Magazine
     end
   end

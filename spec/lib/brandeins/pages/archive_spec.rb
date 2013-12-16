@@ -6,7 +6,7 @@ require_lib 'brandeins/pages/archive'
 
 describe BrandEins::Pages::Archive do
 
-  describe 'magazine_for(month: 1, year: 2000)' do
+  describe 'magazine_for(1, 2000)' do
     it 'returns the magazine for a given month and year' do
       archive_html = load_fixture 'archive.html'
       archive = BrandEins::Pages::Archive.new(html: archive_html)
@@ -23,7 +23,7 @@ describe BrandEins::Pages::Archive do
       stub_request(:get, 'http://www.brandeins.de/archiv/2013/neugier/ein-schauspieler-in-daenemark.html').
         to_return(status: 200, body: article_daenemark_html)
 
-      magazine = archive.magazine_for(month: 1, year: 2013)
+      magazine = archive.magazine_for(1, 2013)
 
       expect(magazine.url).to              eq 'http://www.brandeins.de/archiv/2013/neugier.html'
       expect(magazine.title).to            eq 'Neugier'
