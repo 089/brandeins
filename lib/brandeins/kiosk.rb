@@ -1,7 +1,9 @@
 require 'pathname'
+require 'fileutils'
 
 require_relative 'config'
 require_relative 'utils/fetcher'
+require_relative 'pages/archive'
 require_relative 'pages/archive'
 require_relative 'pages/cover'
 require_relative 'merger/pdf_tools'
@@ -47,14 +49,21 @@ module BrandEins
       # 1. Download articles to temp path
       # 2. Create cover if possible
       # 2. Run pdf merge with target path
-      article_pdfs = magazine.save_articles_to temp_path
-      cover_pdf    = cover.save_to temp_path
-      pdf_files    = article_pdfs.unshift(cover_pdf)
-      merger.merge_pdf_files pdf_files, magazine_file_path(month: month, year: year)
+      article_pdfs       = magazine.save_articles_to(temp_path)
+      cover_pdf          = cover.save_to(temp_path)
+      pdf_files          = article_pdfs.unshift(cover_pdf)
+      magazine_file_path = magazine_file_path(month: month, year: year)
+      merger.merge_pdf_files(pdf_files, magazine_file_path)
+      clear_temp_path
+      magazine_file_path
     end
 
     def magazine_file_path(month: nil, year: nil)
       Pathname.new(@target_path) + "brandeins-#{month}-#{year}.pdf"
+    end
+
+    def clear_temp_path
+      FileUtils.rm Dir["#{temp_path}/*.pdf"]
     end
 
     def merger

@@ -1,6 +1,7 @@
 # encoding: utf-8
 
 require 'spec_helper'
+require_lib 'brandeins/config'
 require_lib 'brandeins/kiosk'
 
 require 'tempfile'
@@ -11,13 +12,13 @@ describe BrandEins::Kiosk do
     it 'takes :path from options' do
       path = Tempfile.new('test').path
       kiosk = BrandEins::Kiosk.new(path: path)
-      expect(kiosk.path).to eq path
+      expect(kiosk.target_path).to eq path
     end
 
     it 'defauls to the current working directory if no path is given' do
       kiosk = BrandEins::Kiosk.new
       cwd = Pathname.new('.').realpath.to_s
-      expect(kiosk.path).to eq cwd
+      expect(kiosk.target_path).to eq cwd
     end
 
     it 'raises InvalidPathError if the given path is not accessible' do
@@ -31,7 +32,7 @@ describe BrandEins::Kiosk do
   describe '#fetch_magazine(month: 1, year: 2013)' do
     it 'returns a magzine object' do
       archive_html = load_fixture 'archive.html'
-      stub_request(:get, "http://www.brandeins.de/archive.html").
+      stub_request(:get, BrandEins::Config['archive_uri']).
         to_return(body: archive_html)
 
       magazine_html = load_fixture 'magazine-1-2013.html'
@@ -51,6 +52,9 @@ describe BrandEins::Kiosk do
         to_return(body: pdf_file)
       stub_request(:get, "http://www.brandeins.de/uploads/tx_b4/008_b1_01_13_mikrooekonomie.pdf").
         to_return(body: pdf_file)
+      stub_request(:get, "http://www.brandeins.de/typo3temp/pics/titel_0113_77be1ece47.jpg").
+        to_return(status: 400, body: "")
+
 
       kiosk = BrandEins::Kiosk.new
       magazine = kiosk.fetch_magazine(month: 1, year: 2013)

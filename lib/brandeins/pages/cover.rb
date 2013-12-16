@@ -47,6 +47,7 @@ module BrandEins
         return cover_file_path if File.exists? cover_file_path
         File.binwrite(cover_file_path, to_pdf)
         cover_file_path
+      rescue BrandEins::Utils::Fetcher::ContentNotFetchedError => e
       end
         # File.open(file_path, 'w') do |file|
         #   file.write to_pdf

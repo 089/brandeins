@@ -37,7 +37,7 @@ module BrandEins
 
       def default_opts
         {
-          info: false,
+          info: true,
           warning: true,
           error: true,
           debug: false
@@ -47,12 +47,6 @@ module BrandEins
       def clear_line
         out.write "\r"
         out.write "\e[K"
-        out.flush
-      end
-
-      def print(msg)
-        msg = conformize(msg)
-        out.write msg
         out.flush
       end
 
@@ -78,32 +72,28 @@ module BrandEins
 
       def conformize(msg)
         return msg if msg.size < console_width
-        msg[0, console_width-12] + "…" + msg[msg.length-6, 6]
+        msg[0, console_width - 12] + '…' + msg[msg.length - 6, 6]
       end
 
       def debug(msg, &block)
-        if debug?
-          println msg
-        end
-        if block_given?
-          block.call
-        end
+        println msg if debug?
+        block.call if block_given?
       end
 
       def info(msg, &block)
-        println msg
-        if block_given?
-          result = block.call
-          clear_line
-          result
-        end
+        println msg if info?
+        block.call if block_given?
+      end
+
+      def statusline(msg, &block)
+        print msg if info?
+        result = block.call if block_given?
+        clear_line if info?
+        result
       end
 
       def warning(msg)
-        if warning?
-          clear_line
-          print msg
-        end
+        println msg if warning?
       end
     end
   end
