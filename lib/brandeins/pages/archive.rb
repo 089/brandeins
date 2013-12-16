@@ -1,7 +1,6 @@
 # encoding: utf-8
 
 require 'nokogiri'
-require 'english'
 
 require_relative '../config'
 require_relative '../pages/magazine'
@@ -66,7 +65,7 @@ module BrandEins
 
       def extract_magazine_month(figure)
         meta = figure.css('.meta').first
-        meta.text.match(/(?:.+)(\d{2})\/(?:.+)/) && $LAST_PAREN_MATCH.to_i
+        meta.text.match(/(?:.+)(\d{2})\/(?:.+)/) && $+.to_i
       end
 
       def brandeins_url

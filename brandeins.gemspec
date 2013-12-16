@@ -1,4 +1,5 @@
-# -*- encoding: utf-8 -*-
+# encoding: utf-8
+
 $:.push File.expand_path("../lib", __FILE__)
 require File.expand_path("../lib/brandeins/version.rb", __FILE__) unless defined? BrandEins::Version
 

@@ -1,6 +1,5 @@
 # encoding: utf-8
 
-require 'english'
 require 'nokogiri'
 
 require_relative '../config'
@@ -91,13 +90,13 @@ module BrandEins
 
       def parse_year
         if issue_text.match /Ausgabe (?:.+)\/(.+)/
-          $LAST_PAREN_MATCH.to_i
+          $+.to_i
         end
       end
 
       def parse_month
         if issue_text.match /Ausgabe (.+)\/(?:.+)/
-          $LAST_PAREN_MATCH.to_i
+          $+.to_i
         end
       end
 
