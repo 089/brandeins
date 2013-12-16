@@ -18,12 +18,18 @@ module BrandEins
         end
       end
 
-      def brandeins_url
-        BrandEins::Config['base_uri']
+      def title
+        if node = document.css('h2.csc-firstHeader').first
+          node.children.first.text.gsub("\n", '')
+        end
       end
 
       def document
         @document ||= Nokogiri::HTML(@html)
+      end
+
+      def brandeins_url
+        BrandEins::Config['base_uri']
       end
 
     end
