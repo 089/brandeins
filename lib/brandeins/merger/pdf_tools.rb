@@ -14,8 +14,6 @@ module BrandEins
           get_klass_for_external(env).new
         end
 
-        private
-
         def get_klass_for_external(env)
           if env[:os].include? 'w32'
             BrandEins::Merger::External::GhostscriptWindows
@@ -23,7 +21,6 @@ module BrandEins
             BrandEins::Merger::External::Pdftk
           end
         end
-
       end
 
     end

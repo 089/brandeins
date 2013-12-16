@@ -22,8 +22,6 @@ module BrandEins
         BrandEins::Config['base_uri']
       end
 
-      private
-
       def document
         @document ||= Nokogiri::HTML(@html)
       end
