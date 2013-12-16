@@ -36,10 +36,12 @@ module BrandEins
 
     def raise_if_path_inaccessible
       path = Pathname.new(@target_path)
-      path.writable? or raise InvalidPathError, 'Cannot access the given path'
+      path.writable? or raise InvalidPathError,
+                              "Cannot access the given path: #{@target_path}"
     end
 
     def download_magazine(month, year)
+      cli.info "Downloading to: #{@target_path}"
       magazine           = fetch_magazine(month, year)
       cover_pdf_path     = download_cover(magazine)
       article_pdf_paths  = download_article_pdfs(magazine)
