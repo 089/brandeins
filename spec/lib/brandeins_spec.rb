@@ -9,10 +9,10 @@ describe BrandEins do
 
   describe '.run' do
     it 'shows current version' do
-      out = capture_stdout do
+      version = capture_stdout do
         BrandEins::Cli.run(%w[version])
-      end
-      expect(out.chomp).to eq BrandEins::VERSION
+      end.chomp
+      expect(version).to eq BrandEins::VERSION
     end
   end
 
