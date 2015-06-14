@@ -8,7 +8,7 @@ module BrandEins
   #   BrandEins::Config['base_uri']
   class Config
     BASE_URI          = 'http://www.brandeins.de'
-    ARCHIVE_URI       = BASE_URI + '/archiv.html'
+    ARCHIVE_URI       = BASE_URI + '/archiv/'
     BASE_PATH         = Pathname.new(ENV['HOME']) + '.brandeins'
     CACHE_PATH        = BASE_PATH + 'cache'
     TEMP_PATH         = BASE_PATH + 'temp'

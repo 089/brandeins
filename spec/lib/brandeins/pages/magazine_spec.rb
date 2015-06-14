@@ -23,9 +23,9 @@ describe BrandEins::Pages::Magazine do
 
   describe '#article_urls' do
     it 'returns an array of urls to article pages' do
-      expect(page.article_urls.first).to eq 'http://www.brandeins.de/archiv/2013/neugier/masskonfektion-aus-plastik.html'
-      expect(page.article_urls.last).to  eq 'http://www.brandeins.de/archiv/2013/neugier/ein-schauspieler-in-daenemark.html'
-      expect(page.article_urls.size).to  eq 2
+      expect(page.article_urls.first).to eq 'http://www.brandeins.de/archiv/2013/neugier/weiter/'
+      expect(page.article_urls.last).to  eq 'http://www.brandeins.de/archiv/2013/neugier/wer-hats-gesagt/'
+      expect(page.article_urls.size).to  eq 31
     end
   end
 
@@ -84,7 +84,7 @@ describe BrandEins::Pages::Magazine do
 
   describe '#url' do
     it 'returns the correct url' do
-      expect(page.url).to eq 'http://www.brandeins.de/archiv/2013/neugier.html'
+      expect(page.url).to eq 'http://www.brandeins.de/archiv/2013/neugier/'
     end
   end
 

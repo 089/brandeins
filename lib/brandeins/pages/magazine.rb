@@ -50,7 +50,7 @@ module BrandEins
       end
 
       def title
-        @title ||= document.css('.current-issue h2').children.first.text
+        @title ||= document.css('.current-issue h1').text
       end
 
       def year
@@ -97,8 +97,7 @@ module BrandEins
       end
 
       def issue_text
-        node = document.css('.current-issue h3').last
-        node.children.first.text
+        document.css('.current-issue .ausgabe').text
       end
 
       def parse_url
