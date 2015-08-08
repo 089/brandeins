@@ -7,7 +7,7 @@ PATH
       rake
 
 GEM
-  remote: http://rubygems.org/
+  remote: https://rubygems.org/
   specs:
     Ascii85 (1.0.2)
     addressable (2.3.5)
@@ -54,10 +54,12 @@ GEM
       parser (~> 2.0)
       powerpack (~> 0.0.6)
       rainbow (>= 1.1.4)
+    ruby-progressbar (1.7.5)
     ruby-rc4 (0.1.5)
     safe_yaml (0.9.7)
     slop (3.4.7)
     ttfunk (1.0.3)
+    vcr (2.9.3)
     webmock (1.16.1)
       addressable (>= 2.2.7)
       crack (>= 0.3.2)
@@ -70,4 +72,6 @@ DEPENDENCIES
   byebug
   rspec
   rubocop
+  ruby-progressbar
+  vcr
   webmock

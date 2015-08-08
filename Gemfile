@@ -1,13 +1,15 @@
-source "http://rubygems.org"
+source 'https://rubygems.org'
 
 group :test do
   gem 'rspec'
   gem 'webmock'
-  gem 'rubocop'
 end
 
-group :debug do
+group :development do
   gem 'byebug'
+  gem 'rubocop'
+  gem 'vcr'
+  gem 'ruby-progressbar'
 end
 
 gemspec

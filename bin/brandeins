@@ -1,5 +1,5 @@
 #!/usr/bin/env ruby
 
-require 'brandeins'
+require_relative '../lib/brandeins'
 
 BrandEins::Cli.run(ARGV)
