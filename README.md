@@ -51,3 +51,8 @@ Pull requests are very welcome! Please try to follow these simple rules if appli
 
 ### Contributors
 [Thorben Schröder](https://github.com/walski)
+
+
+License
+-------
+http://grekko.mit-license.org/
