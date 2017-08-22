@@ -2,7 +2,8 @@ AllCops:
   Include:
     - Rakefile
   Exclude:
-    - vendor/**
+    - 'vendor/**/*'
+    - 'tmp/**/*'
 
 AndOr:
    Enabled: false
